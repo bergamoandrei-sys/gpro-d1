@@ -7685,9 +7685,15 @@ const baseReporteGpro=[
     const ruta = '/rest/v1/gpro_gestion_contrato?select=id,lunes,partidas,detalle,accion,responsable,plazo'+
       '&tipo=eq.restriccion&cerrado_en=is.null&order=id.asc&limit=500'+
       '&contrato_codigo=eq.'+encodeURIComponent(vista.codigo)+'&or=(lunes.is.null,lunes.lte.'+vista.lunes+')';
-    const abiertas = await consultarPaginasPiloto(ruta,despuesDeId,()=>vistaPlanRemoto===vista);
-    return diasSemana.map((_,d)=>{
-      const programadas = new Map(vista.partidas.filter(p=>qDia(p,d)>0||hhDia(p,d)>0).map(p=>[p[0],p[2]]));
+    const [abiertas,pods] = await Promise.all([
+      consultarPaginasPiloto(ruta,despuesDeId,()=>vistaPlanRemoto===vista),
+      consultarPodsPiloto(vista).catch(()=>null),
+    ]);
+    const porDia = diasSemana.map((_,d)=>{
+      const pod = pods?.find(p=>p.jornada===d&&p.cerrado_en);
+      const partidasDia = pod ? metasPodPiloto(vista.partidas,d,pod) :
+        vista.partidas.filter(p=>qDia(p,d)>0||hhDia(p,d)>0);
+      const programadas = new Map(partidasDia.map(p=>[p[0],p[2]]));
       return abiertas.flatMap(restriccion=>{
         if (!restriccion.partidas.length) return restriccion.lunes===null || restriccion.lunes===vista.lunes
           ? [{restriccion,partidas:[]}] : [];
@@ -7696,6 +7702,7 @@ const baseReporteGpro=[
         return partidas.length?[{restriccion,partidas}]:[];
       }).sort((a,b)=>a.restriccion.plazo.localeCompare(b.restriccion.plazo));
     });
+    return {porDia,podDisponible:pods!==null};
   }
 
   function alcanceRestriccionJornada(restriccion) {
@@ -7715,11 +7722,15 @@ const baseReporteGpro=[
     reintentarRestricciones.hidden = true;
     estadoRestricciones.textContent = 'Consultando restricciones…';
     try {
-      const porDia = await consultarRestriccionesJornadas(vista);
+      const {porDia,podDisponible} = await consultarRestriccionesJornadas(vista);
       if (!vigente()) return;
       vista.restriccionesJornada = porDia;
       mostrarPpcDiario(vista);
-      consultaRestricciones.hidden = true;
+      consultaRestricciones.hidden = podDisponible;
+      if (!podDisponible) {
+        estadoRestricciones.textContent = 'POD no disponible. Las partidas afectadas se muestran según el Plan Semanal.';
+        reintentarRestricciones.hidden = false;
+      }
     } catch {
       if (!vigente()) return;
       vista.restriccionesJornada = null;
@@ -7752,18 +7763,20 @@ const baseReporteGpro=[
     alertasRestriccion.hidden = true;
     alertasRestriccion.replaceChildren();
     try {
-      const porDia = await consultarRestriccionesJornadas(vista);
+      const {porDia,podDisponible} = await consultarRestriccionesJornadas(vista);
       if (vistaPlanRemoto!==vista || vista.jornada!==consulta) return;
       vista.restriccionesJornada = porDia;
       const aplicables = porDia[consulta.jornada];
-      if (!aplicables.length) return;
+      if (!aplicables.length && podDisponible) return;
       const hoy = fechaHoy();
-      alertasRestriccion.innerHTML = '<h4>Restricciones abiertas</h4><ul>'+aplicables.map(({restriccion:r, partidas}) =>
+      const aviso = podDisponible ? '' : '<p>POD no disponible. Se consultó la programación del Plan Semanal.</p>';
+      const listado = aplicables.length ? '<ul>'+aplicables.map(({restriccion:r, partidas}) =>
         '<li><strong>'+esc(r.detalle)+'</strong><p>'+(
           partidas.length ? partidas.map(esc).join(', ') : alcanceRestriccionJornada(r)
         )+'</p><p>'+esc(r.accion)+' · '+esc(r.responsable)+' · '+esc(fechaCorta(r.plazo))+
         (r.plazo < hoy ? ' · Vencida' : '')+'</p></li>'
-      ).join('')+'</ul>';
+      ).join('')+'</ul>' : '';
+      alertasRestriccion.innerHTML = '<h4>Restricciones abiertas</h4>'+aviso+listado;
       alertasRestriccion.hidden = false;
     } catch {
       if (vistaPlanRemoto !== vista || vista.jornada !== consulta) return;
