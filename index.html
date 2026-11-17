@@ -1012,13 +1012,43 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
 #piloto-resumen-reunion .cierre-cifra dt{color:#384f63;font-size:.84rem}
 #piloto-resumen-reunion .cierre-cifra dd{font-size:1.43rem;font-weight:750;line-height:1.25;margin:4px 0 0;font-variant-numeric:tabular-nums}
 #piloto-resumen-reunion .cierre-atencion{background:#fff5e4;border-color:#e4c891;color:#784507}
-#piloto-resumen-reunion .cierre-avance{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr));align-items:center;gap:12px;padding:10px 12px;border:1px solid #dce6ee;border-radius:8px}
+#piloto-resumen-reunion .cierre-avance{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#piloto-resumen-reunion .cierre-avance article{padding:clamp(12px,2vw,20px);border:1px solid #c5d7e7;border-radius:10px;background:#eef5fc}
+#piloto-resumen-reunion .cierre-avance article.cierre-avance-real{background:#eaf6f0;border-color:#b9dbc9}
 #piloto-resumen-reunion .cierre-barra{display:grid;grid-template-columns:1fr auto;gap:3px 5px;align-items:baseline;font-size:.86rem}
 #piloto-resumen-reunion .cierre-barra i{grid-column:1/-1;height:6px;border-radius:4px;background:#dce7ef;overflow:hidden}
 #piloto-resumen-reunion .cierre-barra i span{display:block;height:100%;background:#287d67}
-#piloto-resumen-reunion .cierre-avance .cierre-barra:first-child i span{background:#356b9e}
-#piloto-resumen-reunion .cierre-delta{display:grid;line-height:1.35}
-#piloto-resumen-reunion .cierre-delta strong{font-size:1.2rem}
+#piloto-resumen-reunion .cierre-avance .cierre-barra{grid-template-columns:minmax(0,1fr);gap:7px;font-size:.98rem;font-weight:650}
+#piloto-resumen-reunion .cierre-avance .cierre-barra strong{font-size:clamp(2rem,4.2vw,3.25rem);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+#piloto-resumen-reunion .cierre-avance .cierre-barra i{height:12px;margin-block:4px}
+#piloto-resumen-reunion .cierre-avance-plan .cierre-barra i span{background:#356b9e}
+#piloto-resumen-reunion .cierre-avance-real .cierre-barra i{background:#d2e6dc}
+#piloto-resumen-reunion .cierre-avance small{display:block;margin-top:7px;color:#385368}
+#piloto-resumen-reunion .cierre-cifras-principales{grid-template-columns:repeat(2,minmax(0,1fr))}
+#piloto-resumen-reunion .cierre-cifras-principales .cierre-cifra{padding:10px 12px;background:#eef4f8}
+#piloto-resumen-reunion .cierre-cifras-principales dd{font-size:1.75rem}
+#piloto-resumen-reunion .cierre-cifra small{display:block;margin-top:4px;color:#435c70;font-size:.8rem;font-weight:500}
+#piloto-resumen-reunion .tendencia-grafico{margin:0}
+#piloto-resumen-reunion .tendencia-serie li{min-width:0;flex:1 1 0;max-width:none}
+#piloto-resumen-reunion .tendencia-entrega{overflow-wrap:anywhere}
+#piloto-resumen-reunion .cierre-horas-dia{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:8px 0 10px}
+#piloto-resumen-reunion .cierre-horas-dia div{background:white;border-radius:5px;padding:5px 7px}
+#piloto-resumen-reunion .cierre-horas-dia dt{font-size:.77rem;color:#465e72}
+#piloto-resumen-reunion .cierre-horas-dia dd{margin:2px 0 0;font-weight:750;font-variant-numeric:tabular-nums}
+#piloto-resumen-reunion .cierre-dia-acciones{margin-top:10px;gap:5px}
+#piloto-resumen-reunion .cierre-dia-acciones button{font-size:.84rem;min-height:34px;padding:6px 8px}
+#piloto-resumen-reunion .cierre-dia-acciones button[aria-expanded="true"]{border-color:#6695bc;background:#deecf8;color:#19456b}
+#piloto-resumen-reunion .cierre-detalle-dia{min-width:0;border:1px solid #c5d7e7;border-radius:8px;background:#f5f9fc;padding:10px}
+#piloto-resumen-reunion .cierre-detalle-dia .scroll{margin-top:8px;background:white}
+#piloto-resumen-reunion .cierre-comparacion :is(th,td):nth-child(n+4):nth-child(-n+8){text-align:right;white-space:nowrap}
+#piloto-resumen-reunion .cierre-comparacion :is(th,td):is(:nth-child(6),:nth-child(8)){background:#eaf6f0}
+#piloto-resumen-reunion .cierre-brecha,#piloto-resumen-reunion .cierre-sin-envio{color:#784507;background:#fff0d6;border-radius:4px;padding:2px 6px;white-space:nowrap}
+#piloto-form-acuerdos .cierre-decisiones{margin:0}
+#piloto-form-acuerdos .cierre-decisiones fieldset{min-inline-size:0;display:grid;gap:8px;border:1px solid #dce6ee;border-radius:8px;margin:10px 0}
+@media(max-width:480px){
+  #piloto-resumen-reunion .cierre-avance{grid-template-columns:minmax(0,1fr)}
+  #piloto-resumen-reunion .tendencia-entregas .tendencia-entrega{font-size:.72rem}
+}
 #piloto-resumen-reunion .cierre-dia h5{display:flex;justify-content:space-between;gap:5px;margin:0 0 6px}
 #piloto-resumen-reunion .cierre-dia :is(p,time){color:#465e72;font-size:.82rem}
 #piloto-resumen-reunion .cierre-dia .cierre-barra+.cierre-barra{margin-top:6px}
@@ -1026,6 +1056,22 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
 #piloto-resumen-reunion .cierre-entrega[data-entrega="a-tiempo"]{background:#dff2e8;color:#16593d}
 #piloto-resumen-reunion .cierre-entrega:is([data-entrega="tarde"],[data-entrega="vencido"]){background:#ffe9d4;color:#7b3909}
 #piloto-resumen-reunion .cierre-hallazgo{padding:9px 11px;background:#fff5e4;border-inline-start:3px solid #b77a30;border-radius:4px}
+
+#piloto-foco-gpro .foco-resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,158px),1fr));gap:10px;margin:10px 0 20px}
+#piloto-foco-gpro .foco-cifra{display:grid;gap:4px;padding:12px 14px;border:1px solid #cddde9;border-radius:9px;background:#edf5fa;color:#16364d;text-decoration:none}
+#piloto-foco-gpro .foco-cifra strong{font-size:1.85rem;line-height:1.1;font-variant-numeric:tabular-nums}
+#piloto-foco-gpro .foco-cifra small{color:#456073}
+#piloto-foco-gpro .foco-cifra[data-atencion="true"]{background:#fff2e4;border-color:#e2bc99;color:#79340e}
+#piloto-foco-gpro .foco-lista{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+#piloto-foco-gpro .foco-lista li{display:grid;gap:4px;padding:10px 12px;background:#f3f7fa;border-radius:7px;border-inline-start:3px solid #7198b6;overflow-wrap:anywhere}
+#piloto-foco-gpro .foco-lista li[data-critico="true"]{border-color:#b3552b;background:#fff5ea}
+#piloto-foco-gpro .foco-lista p{margin:0}
+#piloto-foco-gpro .foco-lista button{margin-top:4px}
+#piloto-foco-gpro .foco-meta{color:#455f74;font-size:.86rem}
+#piloto-foco-gpro .tendencia-grafico{margin:0}
+#piloto-foco-gpro .tendencia-serie li{flex:1 0 44px}
+#piloto-foco-gpro .foco-causas{padding-inline-start:1.4em}
+#piloto-foco-gpro .foco-causas li{padding:5px 0}
 </style>
 </head>
 <body>
@@ -1058,6 +1104,7 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
           <nav aria-label="Navegación del rol">
             <button type="button" data-menu-piloto="contratos">Contratos</button>
             <button type="button" data-menu-piloto="semanas" hidden>Semanas del contrato</button>
+            <button type="button" data-menu-piloto="foco-gpro" hidden>Foco de gestión</button>
             <button type="button" data-menu-piloto="evolucion" hidden>Evolución semanal</button>
             <button type="button" data-menu-piloto="plan" hidden>Plan Semanal</button>
             <button type="button" data-menu-piloto="jornadas" hidden>Jornadas</button>
@@ -1133,6 +1180,14 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
            <dl class="resumen-cifras"></dl>
          </section>
          <div id="piloto-datos-evolucion"></div>
+      </section>
+      <section id="piloto-foco-gpro" hidden aria-labelledby="piloto-titulo-foco-gpro">
+        <div class="row split">
+          <h2 id="piloto-titulo-foco-gpro" tabindex="-1">Foco de gestión</h2>
+          <button type="button" id="piloto-actualizar-foco-gpro">Actualizar</button>
+        </div>
+        <p id="piloto-estado-foco-gpro" role="status"></p>
+        <div id="piloto-datos-foco-gpro"></div>
       </section>
       <section id="piloto-semanas" hidden aria-labelledby="piloto-titulo-semanas">
         <button type="button" class="link" id="piloto-volver-contratos">← Contratos</button>
@@ -1275,15 +1330,18 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
             <h3 id="piloto-titulo-acuerdos">Reunión de cierre semanal</h3>
             <p id="piloto-semana-acuerdos"></p>
             <div id="piloto-resumen-reunion" aria-live="polite"></div>
-            <h4>Decisiones de reunión</h4>
-            <div id="piloto-ajustes-v3"></div>
-            <div id="piloto-lista-acuerdos"></div>
-            <p id="piloto-error-acuerdos" role="alert"></p>
-            <div class="row">
-              <button type="button" id="piloto-agregar-acuerdo">Agregar acuerdo</button>
-              <button type="button" id="piloto-cancelar-acuerdos">Cancelar</button>
-              <button type="submit" class="primary">Confirmar cierre semanal</button>
-            </div>
+            <section class="card cierre-decisiones" aria-labelledby="piloto-titulo-decisiones">
+              <h4 id="piloto-titulo-decisiones">Decisiones de la reunión</h4>
+              <p id="piloto-ayuda-acuerdos" class="muted" hidden>Registra cada acción con un responsable y una fecha comprometida.</p>
+              <div id="piloto-ajustes-v3"></div>
+              <div id="piloto-lista-acuerdos"></div>
+              <p id="piloto-error-acuerdos" role="alert"></p>
+              <div class="row">
+                <button type="button" id="piloto-agregar-acuerdo">Agregar acuerdo</button>
+                <button type="button" id="piloto-cancelar-acuerdos">Cancelar</button>
+                <button type="submit" class="primary">Confirmar cierre semanal</button>
+              </div>
+            </section>
           </form>
         </dialog>
       </section>
@@ -2291,7 +2349,7 @@ const pctTendencia=v=>v===null?'—':num(Math.round(v*10)/10)+' %';
 
 const fechaTendencia=jornada=>fechaCorta(jornada).slice(0,5);
 
-function graficoTendencia(titulo,descripcion,dias,clave,{conteo=false}={}){
+function graficoTendencia(titulo,descripcion,dias,clave,{conteo=false,periodo='jornadas'}={}){
   const valores=dias.map(d=>d[clave]).filter(v=>v!==null);
   const media=lista=>lista.reduce((s,v)=>s+v,0)/lista.length;
   const escala=valores.reduce((max,v)=>Math.max(max,v),conteo?1:100);
@@ -2299,7 +2357,7 @@ function graficoTendencia(titulo,descripcion,dias,clave,{conteo=false}={}){
   const cambio=!conteo&&valores.length>=6?Math.round((media(valores.slice(-3))-media(valores.slice(-6,-3)))*10)/10:null;
   return '<article class="card tendencia-grafico"><h3>'+titulo+'</h3><p class="muted">'+descripcion+'</p>'+
     (cambio===null?'':'<p class="tendencia-cambio"><strong>'+(cambio>0?'+':'')+num(cambio)+
-      ' pp</strong> · últimas 3 jornadas con dato frente a las 3 anteriores</p>')+
+      ' pp</strong> · últimas 3 '+periodo+' con dato frente a las 3 anteriores</p>')+
     '<div class="scroll" tabindex="0" aria-label="'+titulo+'"><ol class="tendencia-serie">'+
     dias.map(d=>{
       const valor=d[clave];
@@ -2311,18 +2369,21 @@ function graficoTendencia(titulo,descripcion,dias,clave,{conteo=false}={}){
     }).join('')+'</ol></div></article>';
 }
 
-function panelTendencias(dias){
-  if(!dias.length) return '<section class="card metrica-panel"><h2>Tendencias de desempeño</h2>'+
-    '<p>Sin jornadas iniciadas con planificación o registros para este contrato y período.</p></section>';
+function graficoEntregaD1(dias){
   const aTiempo=dias.filter(d=>d.estadoEntrega==='a-tiempo').length;
   const evaluables=dias.filter(d=>['a-tiempo','tarde','vencido'].includes(d.estadoEntrega)).length;
-  const informes='<article class="card tendencia-grafico"><h3>Entrega de informes D+1</h3>'+
+  return '<article class="card tendencia-grafico"><h3>Entrega de informes D+1</h3>'+
     '<p class="muted">Primer envío completo a ITO hasta las 10:00 del día siguiente, hora de Santiago.</p>'+
     '<p class="tendencia-cambio"><strong>'+pct(aTiempo,evaluables)+'</strong> · '+aTiempo+' de '+evaluables+
     ' informes evaluables a tiempo</p>'+
     '<div class="scroll" tabindex="0" aria-label="Entrega por jornada"><ol class="tendencia-serie tendencia-entregas">'+
-    dias.map(d=>'<li><span class="tendencia-entrega '+d.estadoEntrega+'">'+estadosEntrega[d.estadoEntrega]+
+    dias.map(d=>'<li><span class="tendencia-entrega '+(d.estadoEntrega??'')+'">'+(estadosEntrega[d.estadoEntrega]??'Sin dato')+
       '</span><time datetime="'+d.jornada+'">'+fechaTendencia(d.jornada)+'</time></li>').join('')+'</ol></div></article>';
+}
+
+function panelTendencias(dias){
+  if(!dias.length) return '<section class="card metrica-panel"><h2>Tendencias de desempeño</h2>'+
+    '<p>Sin jornadas iniciadas con planificación o registros para este contrato y período.</p></section>';
   return '<section class="metrica-panel"><h2>Tendencias de desempeño</h2>'+
     '<p class="muted">Cada punto corresponde a una jornada de ejecución. El asterisco indica una jornada en curso.</p>'+
     '<div class="tendencias-grid">'+
@@ -2339,7 +2400,7 @@ function panelTendencias(dias){
       dias.map(d=>fila([fechaCorta(d.jornada)+(d.parcial?' · En curso':''),d.cumplimiento===null?'—':pctTendencia(d.cumplimiento)+' · '+num(d.reales)+' / '+num(d.programadas),
         d.ppc===null?'—':pctTendencia(d.ppc)+' · '+d.cumplidas+' / '+d.previstas,
         d.errores===null?'—':d.observadas+' / '+d.revisadas,pctTendencia(d.fpy)])).join(''))+'</details></section>'+
-    '<h3>Entrega y validación de informes</h3><div class="tendencias-grid">'+informes+
+    '<h3>Entrega y validación de informes</h3><div class="tendencias-grid">'+graficoEntregaD1(dias)+
     graficoTendencia('Cobertura de envío','Actividades previstas con cantidades enviadas a ITO.',dias,'cobertura')+
     graficoTendencia('Validación ITO','Actividades validadas sobre el total de actividades enviadas al corte.',dias,'confianza')+
     '</div><section class="card"><details><summary>Ver datos y criterios por jornada</summary>'+
@@ -3616,6 +3677,7 @@ const baseReporteGpro=[
   const panelCncContrato = document.querySelector('#piloto-cnc-contrato');
   const tituloContratos = document.querySelector('#piloto-titulo');
   const panelSemanas = document.querySelector('#piloto-semanas');
+  const panelFocoGpro = document.querySelector('#piloto-foco-gpro');
   const tituloSemanas = document.querySelector('#piloto-titulo-semanas');
   const listadoSemanas = document.querySelector('#piloto-listado-semanas');
   const actualizarSemanas = document.querySelector('#piloto-actualizar-semanas');
@@ -3670,7 +3732,7 @@ const baseReporteGpro=[
       const partida = partidas.get(registro.item_plan);
       const linea = 8+indice;
       const nombre = metas.has(registro.item_plan) ? registro.descripcion :
-        (partida?'Recuperación Plan Semanal · ':'Fuera del POD · ')+registro.descripcion;
+        (partida?'Fuera del POD · Plan Semanal · ':'Fuera del POD · ')+registro.descripcion;
       if (indice>=96) masActividades.push([registro.item_plan,partida?.[1],nombre,Number(registro.cantidad),
         metas.get(registro.item_plan),registro.hh==null?null:Number(registro.hh),registro.observacion_ito]);
       else Object.assign(actividades, {
@@ -3830,7 +3892,8 @@ const baseReporteGpro=[
     const fichaPerfil = perfilesUI[perfil];
     const dentroDelReporte = enSemana && !panelPod.hidden && !reporteAbierto.hidden;
     const actual = !selectorContrato.hidden ? 'contratos' : !panelCncContrato.hidden ? 'cnc-contrato' :
-      !panelLibro.hidden ? 'libro' : !panelEvolucion.hidden ? 'evolucion' : !panelConsolidado.hidden ? 'consolidado' :
+      !panelLibro.hidden ? 'libro' : !panelFocoGpro.hidden ? 'foco-gpro' :
+      !panelEvolucion.hidden ? 'evolucion' : !panelConsolidado.hidden ? 'consolidado' :
       !panelGestion.hidden ? gestion?.tipo : enSemana ? vistaPlanRemoto?.destino : 'semanas';
     const ocultarVistasContrato = perfil!=='PyC'||!['semanas','evolucion'].includes(actual);
     if (vistasContratoPiloto.hidden!==ocultarVistasContrato) vistasContratoPiloto.hidden = ocultarVistasContrato;
@@ -3852,6 +3915,7 @@ const baseReporteGpro=[
       const vista = vistasSemana.querySelector('[data-vista-semana="'+destino+'"]');
       boton.hidden = vista ? !enSemana || vista.hidden : destino !== 'contratos' &&
         (!vistaSemana || (destino === 'consolidado' && !['PyC','GPRO'].includes(perfil)) ||
+          (destino==='foco-gpro'&&perfil!=='GPRO') ||
           (['evolucion','cnc-contrato'].includes(destino)&&perfil!=='PyC') || (destino==='libro'&&perfil==='ITO'));
       if (destino === actual) boton.setAttribute('aria-current','page');
       else boton.removeAttribute('aria-current');
@@ -4025,6 +4089,11 @@ const baseReporteGpro=[
       return;
     }
     if (!vistaSemana) return;
+    if (!panelFocoGpro.hidden) {
+      if (destino==='foco-gpro') return;
+      panelFocoGpro.hidden = true;
+      panelSemanas.hidden = false;
+    }
     if (!panelCncContrato.hidden) {
       if (destino === 'cnc-contrato') return;
       cerrarCncContrato();
@@ -4059,6 +4128,7 @@ const baseReporteGpro=[
     if (!panelPlan.hidden) document.querySelector('#piloto-volver-semanas').click();
     if (!panelEvolucion.hidden) mostrarSemanasDesdeEvolucion();
     if (destino === 'cnc-contrato') abrirCncContrato(vistaSemana);
+    else if (destino === 'foco-gpro') abrirFocoGpro(vistaSemana);
     else if (destino === 'restriccion' || destino === 'compromiso') abrirGestion(destino);
     else tituloSemanas.focus();
   });
@@ -5519,7 +5589,7 @@ const baseReporteGpro=[
       const estado = registro.estado_ito;
       if (partida && estado!=='borrador') {
         const pod = pods?.find(p=>p.jornada===d&&p.cerrado_en);
-        if (pod ? !(Number(pod.metas?.[registro.item_plan])>0) : qDia(partida.partida,d)===0) fila.real[d].recuperada = true;
+        if (pod ? !(Number(pod.metas?.[registro.item_plan])>0) : qDia(partida.partida,d)===0) fila.real[d].fueraPod = true;
       }
       const estados = fila.real[d].estados;
       estados[estado] = (estados[estado] ?? 0)+1;
@@ -5586,14 +5656,13 @@ const baseReporteGpro=[
           const qProg = semanal?sumaDias(partida,qDia):qDia(partida,d);
           const hhProg = semanal?sumaDias(partida,(p,i)=>Number(hhDia(p,i))):hhDia(partida,d);
           const qReal = semanal?(q===null?null:q+deltaQ):real[d].q;
-          const recuperada = semanal?real.some(r=>r.recuperada):real[d].recuperada;
           const falta = semanal&&qReal!==null&&diferenciaQ(qReal,qProg)<0 ? redondear2(qProg-qReal) : 0;
           return '<td'+clase(d,false,true)+'>'+valor(partida.length>4?qProg:null)+'</td><td'+clase(d)+'>'+
             valor(partida.length>4?hhProg:null)+'</td><td'+clase(d,true)+'>'+
             valor(qReal)+(semanal&&ajustes?'<small>Ajuste V3</small>':'')+
             (semanal&&qProg>0&&qReal===null?'<small class="matriz-faltante">Sin envío</small>':
               falta>0?'<small class="matriz-faltante">Faltan '+num(falta)+' '+esc(unidad)+'</small>':'')+
-            (recuperada?'<small class="extra-plan">Recuperación</small>':'')+
+            (!semanal&&real[d].fueraPod?'<small class="extra-plan">Fuera del POD</small>':'')+
             (semanal?'':etiquetasEstadoMatriz([real[d]]))+
             (semanal&&editables.length&&matrizConsolidado.dataset.editarV3==='true'?
               '<button type="button" class="link" data-ajustar-v3="'+i+'" aria-label="Ajustar V3 · '+esc(descripcion)+'">Ajustar V3</button>':'')+
@@ -6184,15 +6253,88 @@ const baseReporteGpro=[
         '<p>Actualiza el consolidado para volver a comprobar si la semana puede cerrar.</p>':'')+'</section>';
   }
 
-  function cifrasCierre(items) {
-    return '<dl class="cierre-cifras">'+items.map(([etiqueta,valor,tono])=>'<div class="cierre-cifra'+
-      (tono?' cierre-'+tono:'')+'"><dt>'+esc(etiqueta)+'</dt><dd>'+esc(valor)+'</dd></div>').join('')+'</dl>';
+  function cifrasCierre(items, principales=false) {
+    return '<dl class="cierre-cifras'+(principales?' cierre-cifras-principales':'')+'">'+
+      items.map(([etiqueta,valor,tono,detalle])=>'<div class="cierre-cifra'+(tono?' cierre-'+tono:'')+'"><dt>'+
+        esc(etiqueta)+'</dt><dd>'+esc(valor)+(detalle?'<small>'+esc(detalle)+'</small>':'')+'</dd></div>').join('')+'</dl>';
   }
 
   function barraCierre(etiqueta,valor,texto) {
     const ancho = Number.isFinite(valor)?Math.max(0,Math.min(100,valor*100)):null;
     return '<div class="cierre-barra"><span>'+esc(etiqueta)+'</span><strong>'+esc(texto)+'</strong>'+
       (ancho===null?'':'<i aria-hidden="true"><span style="width:'+ancho+'%"></span></i>')+'</div>';
+  }
+
+  const razonCierre = (a,b)=>Number.isFinite(a)&&Number.isFinite(b)&&b>0?a/b:null;
+  const porcentajeCierre = v=>v==null?'—':porcentajeSemanal.format(v);
+  const cantidadCierre = v=>v==null?'—':num(v);
+
+  function avanceReunion(semana,programado,real) {
+    const hhProgramadas = cantidadComparable(semana.hh_programadas);
+    const hhReales = cantidadComparable(semana.hh_reales);
+    const proporcion = razonCierre(hhReales,hhProgramadas);
+    const tarjeta = (tipo,etiqueta,valor,barra,detalle) => '<article class="cierre-avance-'+tipo+'">'+
+      barraCierre(etiqueta,barra,porcentajeCierre(valor))+'<small>'+esc(detalle)+'</small></article>';
+    return '<div class="cierre-avance">'+tarjeta('plan','Avance programado',programado,hhProgramadas>0?1:null,
+      hhProgramadas===null?'HH programadas sin dato':num(hhProgramadas)+' HH programadas'+(hhProgramadas>0?' · 100 % de referencia':''))+
+      tarjeta('real','Avance real',real,proporcion,hhReales===null?'HH reales sin dato':
+        num(hhReales)+' HH reales'+(proporcion===null?'':' · '+porcentajeCierre(proporcion)+' de la meta de avance'))+'</div>';
+  }
+
+  function detalleActividadCierre(partidas,pod,podListo,registros,jornada,unidades) {
+    if (!registros) return '<p>Datos de ejecución no disponibles.</p>';
+    const porItem = new Map(registros.filter(r=>r.item_plan!=null).map(r=>[r.item_plan,r]));
+    const metas = new Map((podListo?metasPodPiloto(partidas,jornada,pod):[]).map(p=>[p[0],qDia(p,jornada)]));
+    const detalle = (plan,registro) => {
+      const reportado = registro && registro.estado_ito!=='borrador';
+      const item = plan?.[0] ?? registro?.item_plan;
+      return fila([esc(item??'—'),esc(plan?.[2]??registro?.descripcion),
+        esc(plan?.[3]??registro?.unidad??unidades.get(registro?.id)??'—'),
+        cantidadCierre(plan?qDia(plan,jornada):null),cantidadCierre(metas.get(item)),
+        cantidadCierre(reportado?registro.cantidad:null),cantidadCierre(plan?hhDia(plan,jornada):null),
+        cantidadCierre(reportado?registro.hh:null),esc(registro?(estadosIto[registro.estado_ito]??'—'):'Sin envío')]);
+    };
+    const incluidas = partidas.filter(p=>qDia(p,jornada)>0||hhDia(p,jornada)>0||metas.has(p[0])||porItem.has(p[0]));
+    const ids = new Set(incluidas.map(p=>p[0]));
+    const filas = [...incluidas.map(p=>detalle(p,porItem.get(p[0]))),
+      ...registros.filter(r=>!ids.has(r.item_plan)).map(r=>detalle(null,r))];
+    const columnas = ['Ítem','Actividad','Unidad','Q Plan','Meta Q POD','Q reportada','HH Plan','HH reportadas','Estado ITO'];
+    return (podListo?'':'<p class="muted">POD pendiente de cierre.</p>')+
+      (filas.length?'<div class="cierre-comparacion">'+tabla(columnas,filas.join(''))+'</div>':
+        '<p>Sin actividades programadas ni registros para esta jornada.</p>');
+  }
+
+  function mostrarDetalleDiaCierre(dias,partidas,pods,registros,cnc,causas,cantidades) {
+    const detalle = resumenReunion.querySelector('#piloto-detalle-dia-cierre');
+    const unidades = new Map((cantidades?.filas??[]).map(r=>[r.id,r.unidad]));
+    let activo = null;
+    resumenReunion.onclick = evento=>{
+      const boton = evento.target.closest('[data-cierre-jornada]');
+      const volver = evento.target.closest('[data-cierre-volver]');
+      if (!boton && !volver) return;
+      const anterior = activo;
+      anterior?.setAttribute('aria-expanded','false');
+      activo = boton===anterior?null:boton;
+      detalle.hidden = !activo;
+      if (!activo) {
+        detalle.replaceChildren();
+        anterior?.focus();
+        return;
+      }
+      const jornada = Number(boton.dataset.cierreJornada), verCnc = boton.dataset.cierreVista==='cnc';
+      const pod = pods?.find(p=>p.jornada===jornada&&p.cerrado_en);
+      const bloque = cnc?.find(r=>r.jornada===jornada&&r.vigente);
+      const causasDia = causas.filter(r=>r.jornada===jornada);
+      const contenido = verCnc ? (bloque?'<p>Estado CNC · '+esc(estadosIto[bloque.estado]??'—')+'</p>':'')+
+        (causasDia.length?tablaCncPiloto(causasDia):'<p>'+(registros?'Sin causas de no cumplimiento registradas.':'Datos de CNC no disponibles.')+'</p>') :
+        detalleActividadCierre(partidas,pod,dias[jornada].podListo,registros?.filter(r=>r.jornada===jornada),jornada,unidades);
+      detalle.innerHTML = '<div class="row split"><h5 tabindex="-1">'+diasSemana[jornada]+' · '+
+        (verCnc?'Causas de no cumplimiento':'Planificado y reportado')+'</h5>'+
+        '<button type="button" class="link" data-cierre-volver>Volver a las jornadas</button></div>'+contenido;
+      boton.setAttribute('aria-expanded','true');
+      detalle.querySelector('h5').focus({preventScroll:true});
+      detalle.scrollIntoView({block:'nearest'});
+    };
   }
 
   async function cargarResumenReunion(vista,semana,vigente) {
@@ -6226,7 +6368,7 @@ const baseReporteGpro=[
         solicitar(planes+'&lunes=eq.'+lunes,{},token),
         solicitar(planes+'&lunes=eq.'+siguiente,{},token),
         opcional(paginar('/rest/v1/gpro_ejecucion_diaria?select=id,lunes,jornada,item_plan,descripcion,cantidad,hh,estado_ito,cnc,'+
-          'gpro_historial_revision(revision,evento,registrado_en),gpro_inicios_revision(revision,iniciado_en)&order=id.asc'+filtro)),
+          'unidad,gpro_historial_revision(revision,evento,registrado_en),gpro_inicios_revision(revision,iniciado_en)&order=id.asc'+filtro)),
         consultarPodsPiloto({...vista,lunes}),
         opcional(paginar('/rest/v1/gpro_revision_cnc?select=lunes,jornada,ronda,vigente,causas,estado,enviado_en,iniciado_en,decidido_en&order=jornada,ronda'+filtro,
           r=>'&or=(jornada.gt.'+r.jornada+',and(jornada.eq.'+r.jornada+',ronda.gt.'+r.ronda+'))')),
@@ -6242,9 +6384,7 @@ const baseReporteGpro=[
       const partidas = plan?.partidas??[], corte = foto?Date.parse(foto.corte):Date.now();
       const {dias,totales,qEnviadaPorDia} = calcularIndicadoresPiloto(partidas,registros??[],cierres,pods);
       const metricas = datosMetricasPiloto({desde:lunes,hasta:fechaDesde(lunes,3)},plan?[plan]:[],pods??[],registros??[],cnc??[],cierres,corte,[],vacias??[]);
-      const razon = (a,b)=>b>0?porcentajeSemanal.format(a/b):'—';
-      const [programado,real,ppc,reportabilidad] = razonesSemana(semana);
-      const porcentaje = v=>v==null?'—':porcentajeSemanal.format(v);
+      const [programado,real,ppc] = razonesSemana(semana);
       const confianza = semana.cerrado_en ? (semana.actividades_enviadas>0?
         semana.actividades_validadas/semana.actividades_enviadas:
         semana.actividades_enviadas==null&&!semana.extra&&semana.enviados>0?semana.validados/semana.enviados:null) :
@@ -6254,30 +6394,49 @@ const baseReporteGpro=[
         return (horas.length?duracionProceso(horas.reduce((s,h)=>s+h,0)/horas.length):'—')+' · '+horas.length+' registros';
       };
       const variacion = cantidades ? resumenVariacionQ(variacionSemanalPiloto(lunes,partidas,cantidades,pods??[])) : null;
-      const bajoMeta = partidas.filter(p=>{
-        const q = sumaDias(p,qDia);
-        return q>0&&!metaAlcanzada(qEnviadaPorDia.reduce((s,d)=>s+(d.get(p[0])??0),0),q);
+      const bajoMeta = registros ? partidas.flatMap(p=>{
+        const meta = sumaDias(p,qDia);
+        const enviadas = qEnviadaPorDia.flatMap(d=>d.has(p[0])?[d.get(p[0])]:[]);
+        const enviada = enviadas.length?redondear2(enviadas.reduce((s,q)=>s+q,0)):null;
+        return meta>0&&!metaAlcanzada(enviada,meta)?[{p,meta,enviada,falta:redondear2(meta-(enviada??0))}]:[];
+      }) : [];
+      const fechas = diasDeLunes(lunes);
+      let hhAcumuladas = 0;
+      const tendencias = fechas.map((jornada,d)=>{
+        hhAcumuladas += dias[d].hhRealPlan;
+        const alCorte = registros && baseEjecucion(jornada)<=corte && totales.hhPlan>0;
+        const base = metricas.tendencias.find(r=>r.jornada===jornada)??{
+          jornada,parcial:false,estadoEntrega:null,cumplimiento:null,ppc:null,cobertura:null,confianza:null,
+        };
+        return {...base,cumplimientoAcumulado:alCorte?100*hhAcumuladas/totales.hhPlan:null};
       });
-      const tarjetasDia = '<div class="cierre-jornadas">'+dias.map((dia,d)=>{
-        const tendencia = metricas.tendencias.find(r=>r.jornada===fechaDesde(lunes,d));
-        const ratio = (a,b)=>b>0?a/b:null;
-        const ppcDia = dia.podListo?ratio(dia.metasCumplidas,dia.programadas):null;
-        const previstas = ratio(dia.programadasEnviadas,dia.programadas);
-        const ito = ratio(dia.validados,dia.enviados);
-        const entrega = tendencia?.estadoEntrega;
-        return '<article class="cierre-dia"><h5>'+diasSemana[d]+' <time datetime="'+fechaDesde(lunes,d)+'">'+
-          fechaCorta(fechaDesde(lunes,d)).slice(0,5)+'</time></h5><span class="cierre-entrega" data-entrega="'+
-          esc(entrega)+'">'+esc(estadosEntrega[entrega]??'D+1 sin dato')+'</span><p>'+textoCierreJornada(dia)+'</p>'+
-          barraCierre('PPC POD',ppcDia,porcentaje(ppcDia))+
-          barraCierre('Previstas enviadas',previstas,porcentaje(previstas))+
-          barraCierre('Validación ITO',ito,porcentaje(ito))+'</article>';
-      }).join('')+'</div>';
-      const peor = dias.map((d,i)=>({d,i})).filter(({d})=>d.podListo&&d.programadas)
-        .sort((a,b)=>a.d.metasCumplidas/a.d.programadas-b.d.metasCumplidas/b.d.programadas)[0];
+      const graficos = '<div class="tendencias-grid">'+
+        graficoTendencia('Cumplimiento semanal acumulado','HH reportadas acumuladas de partidas del Plan sobre HH programadas de toda la semana.',tendencias,'cumplimientoAcumulado')+
+        graficoTendencia('Cumplimiento diario','HH enviadas de actividades programadas para el día sobre HH del Plan del día.',tendencias,'cumplimiento')+
+        graficoTendencia('PPC por día','Metas cumplidas del POD cerrado sobre metas del día.',tendencias,'ppc')+
+        graficoEntregaD1(tendencias)+
+        graficoTendencia('Cobertura de envío','Actividades previstas con cantidades enviadas a ITO.',tendencias,'cobertura')+
+        graficoTendencia('Validación ITO','Actividades validadas sobre las enviadas al corte.',tendencias,'confianza')+'</div>';
       const causas = registros?.filter(r=>r.estado_ito!=='borrador').flatMap(r=>causasDeActividad(r.cnc)
-        .map(c=>({jornada:r.jornada,item:r.item_plan,actividad:r.descripcion,...c})))??[];
-      const agrupadas = resumirParetoCnc(causas.map(c=>({causa:[,,,{categoria:c.primaria,hhAtribuidas:c.hh_afectadas}]})));
-      const impacto = agrupadas.filter(g=>g.hh>0).sort((a,b)=>b.hh-a.hh)[0];
+        .map(cnc=>({...r,cnc})))??[];
+      const tarjetasDia = '<div class="cierre-jornadas">'+dias.map((dia,d)=>{
+        const ppcDia = dia.podListo?razonCierre(dia.metasCumplidas,dia.programadas):null;
+        const previstas = razonCierre(dia.programadasEnviadas,dia.programadas);
+        const ito = razonCierre(dia.validados,dia.enviados);
+        const entrega = tendencias[d].estadoEntrega;
+        const cncDia = causas.filter(c=>c.jornada===d).length;
+        const boton = (vista,texto) => '<button type="button" data-cierre-jornada="'+d+
+          '" data-cierre-vista="'+vista+'" aria-controls="piloto-detalle-dia-cierre" aria-expanded="false">'+texto+'</button>';
+        return '<article class="cierre-dia"><h5>'+diasSemana[d]+' <time datetime="'+fechas[d]+'">'+
+          fechaTendencia(fechas[d])+'</time></h5><span class="cierre-entrega" data-entrega="'+
+          esc(entrega)+'">'+esc(estadosEntrega[entrega]??'D+1 sin dato')+'</span><p>'+textoCierreJornada(dia)+'</p>'+
+          '<dl class="cierre-horas-dia"><div><dt>HH Plan</dt><dd>'+num(dia.hhPlan)+'</dd></div>'+
+          '<div><dt>HH reportadas</dt><dd>'+(registros&&dia.enviados>dia.sinHh?num(dia.hhReal):'—')+'</dd></div></dl>'+
+          barraCierre('PPC POD',ppcDia,porcentajeCierre(ppcDia))+
+          barraCierre('Previstas enviadas',previstas,porcentajeCierre(previstas))+
+          barraCierre('Validación ITO',ito,porcentajeCierre(ito))+'<div class="row cierre-dia-acciones">'+
+          boton('actividades','Ver jornada')+boton('cnc','Ver CNC'+(cncDia?' · '+cncDia:''))+'</div></article>';
+      }).join('')+'</div><section id="piloto-detalle-dia-cierre" class="cierre-detalle-dia" hidden></section>';
       const brechasSinCnc = registros?.filter(r=>{
         if (r.estado_ito==='borrador'||!r.item_plan||causasDeActividad(r.cnc).length) return false;
         const pod = pods?.find(p=>p.jornada===r.jornada&&p.cerrado_en);
@@ -6303,46 +6462,55 @@ const baseReporteGpro=[
       const requisitos = semana.cerrado_en||!registros?[]:requisitosJornadaCierre(partidas,registros,pods,cnc,cierres,vacias,semana);
       const detalleParcial = !registros || !pods || !cnc || !vacias;
       const evaluablesD1 = semana.d1_a_tiempo + semana.d1_tarde + semana.d1_vencidas;
-      const brechaAvance = Number.isFinite(programado)&&Number.isFinite(real)?(real-programado)*100:null;
-      const deltaAvance = brechaAvance===null?'—':new Intl.NumberFormat('es-CL',{maximumFractionDigits:1,signDisplay:'exceptZero'}).format(brechaAvance)+' pp';
+      const cumplimiento = registros?razonCierre(totales.hhRealPlan,totales.hhPlan):null;
       const estadoSemana = semana.cerrado_en?'Semana cerrada':semana.puede_cerrar?'Lista para cerrar':'Con cierre pendiente';
+      const faltantes = !registros ? '<p>No se pudieron consultar las cantidades reportadas.</p>' :
+        !bajoMeta.length?'<p>'+(semana.metas?'Todas las partidas programadas alcanzaron su meta de Q.':'Sin partidas con meta semanal de Q.')+'</p>':
+        tabla(['Ítem','Actividad','Unidad','Q programada','Q reportada','Q faltante'],
+          bajoMeta.map(({p,meta,enviada,falta})=>fila([esc(p[0]),esc(p[2]),esc(p[3]),num(meta),
+            enviada===null?'<span class="cierre-sin-envio">Sin envío</span>':num(enviada),
+            '<strong class="cierre-brecha">'+num(falta)+'</strong>'])).join(''));
+      const filasCerradas = cerradas.map(r=>fila([esc(r.detalle),esc(r.accion),esc(r.responsable),hora(r.cerrado_en)])).join('');
       resumenReunion.innerHTML = '<div class="cierre-portada"><div><span class="cierre-estado">'+estadoSemana+
         '</span><h4>'+esc(rangoSemana(lunes))+'</h4></div>'+datosCierre+'</div>'+
-        '<section class="card cierre-seccion"><h4>Avance y cumplimiento</h4><div class="cierre-avance">'+
-        barraCierre('Avance programado',programado,porcentaje(programado))+
-        barraCierre('Avance real',real,porcentaje(real))+
-        '<span class="cierre-delta"><strong>'+deltaAvance+'</strong><small>Real menos programado</small></span></div>'+
-        cifrasCierre([['PPC semanal',porcentaje(ppc)],['Reportabilidad',porcentaje(reportabilidad)],
-          ['Validación ITO',porcentaje(confianza)],['D+1 a tiempo',evaluablesD1>0?semana.d1_a_tiempo+' de '+evaluablesD1:'—'],
-          ['MAPE',porcentaje(variacion?.mape)],['Partidas bajo meta',registros===null?'—':bajoMeta.length,bajoMeta.length?'atencion':'']])+
-        '<h5>Desempeño por jornada</h5>'+tarjetasDia+
-        (peor?'<p><strong>Menor PPC del POD</strong> · '+diasSemana[peor.i]+' · '+razon(peor.d.metasCumplidas,peor.d.programadas)+'</p>':'')+
-        (registros&&bajoMeta.length?'<details><summary>Ver partidas bajo meta</summary><ul>'+bajoMeta.map(p=>'<li>'+esc(p[0]+' · '+p[2])+'</li>').join('')+'</ul></details>':'')+
+        '<section class="card cierre-seccion"><h4>Avance de la semana</h4>'+avanceReunion(semana,programado,real)+
+        cifrasCierre([
+          ['Cumplimiento semanal',porcentajeCierre(cumplimiento),'',cumplimiento===null?'':
+            num(totales.hhRealPlan)+' HH reportadas de partidas del Plan / '+num(totales.hhPlan)+' HH programadas'],
+          ['PPC semanal',porcentajeCierre(ppc),'',semana.metas?semana.cumplidas+' de '+semana.metas+' partidas alcanzaron su meta de Q':''],
+        ],true)+
+        cifrasCierre([['Actividades validadas',porcentajeCierre(confianza)],
+          ['D+1 a tiempo',evaluablesD1>0?porcentajeCierre(razonCierre(semana.d1_a_tiempo,evaluablesD1)):'—','',
+            evaluablesD1>0?semana.d1_a_tiempo+' de '+evaluablesD1+' reportes evaluables':''],
+          ['MAPE',porcentajeCierre(variacion?.mape)],['Partidas bajo meta',registros?bajoMeta.length:'—',bajoMeta.length?'atencion':'']])+'</section>'+
+        '<section class="card cierre-seccion"><h4>Tendencias de las 4 jornadas</h4>'+graficos+
+        (tendencias.some(d=>d.parcial)?'<p class="muted">* Jornada en curso.</p>':'')+
         '<details><summary>Tiempos medios verificables</summary>'+tabla(['Tramo','Promedio y muestra'],[
           ['08:00 → primer envío',promedio(metricas.datos,'base','primerEnvio')],
           ['Primer envío → validación',promedio(metricas.datos,'primerEnvio','validacion')],
           ['08:00 → validación',promedio(metricas.datos,'base','validacion')],
           ['08:00 → envío completo',promedio(metricas.reportes,'base','envioCompleto')],
         ].map(fila).join(''))+'</details></section>'+
-        (semana.cerrado_en?'':detalleRequisitosCierre(requisitos,detalleParcial,semana))+
+        '<section class="card cierre-seccion"><h4>Desempeño por jornada</h4>'+tarjetasDia+'</section>'+
+        '<section class="card cierre-seccion"><h4>Partidas sin completar la meta semanal</h4>'+faltantes+'</section>'+
         '<section class="card cierre-seccion"><h4>Causas y alertas</h4>'+
-        (registros===null?'<p>Datos de ejecución y CNC no disponibles.</p>':cifrasCierre([
-          ['CNC registradas',causas.length],['HH atribuidas',num(agrupadas.reduce((s,g)=>s+g.hh,0))],
-          ['CNC sin HH',causas.filter(c=>c.hh_afectadas==null).length],
-          ['Brechas sin CNC',brechasSinCnc??'—',brechasSinCnc?'atencion':'']]))+
-        (impacto?'<p class="cierre-hallazgo"><strong>Mayor impacto</strong> · '+esc(impacto.primaria)+' · '+num(impacto.hh)+' HH</p>':'')+
-        (causas.length?'<details><summary>Ver causas por jornada</summary>'+tabla(['Jornada','Partida','Causa','Responsable','HH'],
-          causas.map(c=>fila([diasSemana[c.jornada],esc(c.item??c.actividad),esc(c.causa),esc(c.responsable),
-            c.hh_afectadas==null?'—':num(c.hh_afectadas)])).join(''))+'</details>':'')+
+        (causas.length?panelParetoCnc(causas.map(({cnc})=>({causa:[,,,{categoria:cnc.primaria,hhAtribuidas:cnc.hh_afectadas}]}))):
+          '<p>'+(registros?'Sin CNC registradas en la semana.':'Datos de ejecución y CNC no disponibles.')+'</p>')+
+        (brechasSinCnc?'<p class="cierre-hallazgo"><strong>'+brechasSinCnc+'</strong> envíos bajo la meta del POD sin CNC.</p>':'')+
         '<h5>Alertas de terreno</h5>'+listaAlertas+'</section>'+
-        '<section class="card cierre-seccion"><h4>Preparación de la próxima semana</h4><p>'+
+        '<section class="card cierre-seccion"><h4>Restricciones y próxima semana</h4><p>'+
         (proximo?'Plan siguiente · '+esc(rangoSemana(siguiente)):'El Plan Semanal siguiente todavía no está cargado.')+'</p>'+
         cifrasCierre([['Restricciones abiertas',abiertas.length],
           ['Vencidas',abiertas.filter(r=>r.plazo<hoy).length,abiertas.some(r=>r.plazo<hoy)?'atencion':''],
           ['Cerradas esta semana',cerradas.length]])+
-        (filasRestricciones.length?tabla(['Restricción','Acción','Responsable','Plazo','Estado','Partidas en riesgo'],filasRestricciones.join('')):'')+
-        (cerradas.length?'<details><summary>Restricciones cerradas en la semana</summary><ul>'+
-          cerradas.map(r=>'<li>'+esc(r.detalle)+' · '+hora(r.cerrado_en)+'</li>').join('')+'</ul></details>':'')+'</section>';
+        '<h5>Abiertas para esta semana o la próxima</h5>'+(filasRestricciones.length?
+          tabla(['Restricción','Acción','Responsable','Plazo','Estado','Partidas en riesgo'],filasRestricciones.join('')):
+          '<p>Sin restricciones abiertas para esta semana o la próxima.</p>')+
+        '<h5>Cerradas durante la semana</h5>'+(filasCerradas?
+          tabla(['Restricción','Acción','Responsable','Fecha de cierre'],filasCerradas):
+          '<p>Sin restricciones cerradas en la semana.</p>')+'</section>'+
+        (semana.cerrado_en?'':detalleRequisitosCierre(requisitos,detalleParcial,semana));
+      mostrarDetalleDiaCierre(dias,partidas,pods,registros,cnc,causas,cantidades);
       return {hayPendientes:requisitos.some(d=>d.temas.length)};
     } catch {
       if (vigente()) resumenReunion.textContent = 'No se pudo consultar el detalle de la reunión. Cierra y vuelve a abrir el resumen para reintentar.';
@@ -6692,6 +6860,174 @@ const baseReporteGpro=[
         '<h4>Detalle por semana</h4>'+cncPorSemana:'<p>Sin CNC enviadas.</p>')+'</section>';
   }
 
+  const datosFocoGpro = document.querySelector('#piloto-datos-foco-gpro');
+  const estadoFocoGpro = document.querySelector('#piloto-estado-foco-gpro');
+  const actualizarFocoGpro = document.querySelector('#piloto-actualizar-foco-gpro');
+
+  function listarJornadasFoco(contrato,desde,hoy,corte,vigente) {
+    const alcance = contrato+'&lunes=gte.'+desde+'&lunes=lte.'+hoy;
+    const paginar = (relacion,campos,orden,cursor)=>consultarPaginasPiloto(
+      '/rest/v1/'+relacion+'?select='+campos+'&order='+orden+'&limit=300'+alcance,cursor,vigente);
+    const jornada = r=>'&or=(lunes.gt.'+r.lunes+',and(lunes.eq.'+r.lunes+',jornada.gt.'+r.jornada+'))';
+    const ronda = r=>'&or=(lunes.gt.'+r.lunes+',and(lunes.eq.'+r.lunes+',jornada.gt.'+r.jornada+
+      '),and(lunes.eq.'+r.lunes+',jornada.eq.'+r.jornada+',ronda.gt.'+r.ronda+'))';
+    const estadoRonda = 'lunes,jornada,ronda,estado,enviado_en,iniciado_en,decidido_en';
+    return Promise.all([
+      paginar('gpro_planes_semanales','lunes,partidas','lunes.asc',despuesDeLunes),
+      paginar('gpro_pods','lunes,jornada,metas,cerrado_en','lunes.asc,jornada.asc',jornada),
+      paginar('gpro_ejecucion_diaria','id,lunes,jornada,item_plan,descripcion,cantidad,hh,estado_ito,revision,creado_en,'+
+        'gpro_historial_revision(revision,evento,registrado_en),gpro_inicios_revision(revision,iniciado_en)','id.asc',despuesDeId),
+      paginar('gpro_revision_cnc',estadoRonda+',causas','lunes.asc,jornada.asc,ronda.asc',ronda),
+      paginar('gpro_cierres_diarios','lunes,jornada,cerrado_en','lunes.asc,jornada.asc',jornada),
+      paginar('gpro_actividades_vacias',estadoRonda,'lunes.asc,jornada.asc,ronda.asc',ronda),
+    ]).then(([planes,pods,registros,cnc,cierres,vacias])=>{
+      const observaciones = new Map(), hhIncompletas = new Set();
+      for (const r of registros) {
+        const clave = fechaDesde(r.lunes,r.jornada);
+        if (r.estado_ito==='observado') observaciones.set(clave,(observaciones.get(clave)??0)+1);
+        if (r.estado_ito!=='borrador' && r.hh==null) hhIncompletas.add(clave);
+      }
+      return datosMetricasPiloto({desde,hasta:hoy},planes,pods,registros,cnc,cierres,corte,[],vacias).tendencias
+        .map(d=>({...d,observadasPendientes:observaciones.get(d.jornada)??0,hhIncompletas:hhIncompletas.has(d.jornada)}));
+    });
+  }
+
+  function excepcionesJornadaFoco(dias) {
+    return dias.flatMap(d=>{
+      const fueraPlazo = ['vencido','tarde'].includes(d.estadoEntrega);
+      const brechaPpc = !d.parcial&&d.cobertura===100&&d.ppc!==null&&d.ppc<100;
+      const brechaHh = !d.parcial&&d.cobertura===100&&!d.hhIncompletas&&d.cumplimiento!==null&&d.cumplimiento<100;
+      const temas = [
+        fueraPlazo ? 'D+1 · '+estadosEntrega[d.estadoEntrega] : '',
+        brechaPpc ? 'PPC '+pctTendencia(d.ppc)+' · '+d.cumplidas+' de '+d.previstas+' metas cumplidas' : '',
+        brechaHh ? 'HH bajo lo programado · '+num(d.reales)+' de '+num(d.programadas)+' HH' : '',
+        d.observadasPendientes ? 'Actividades observadas por ITO · '+d.observadasPendientes : '',
+      ].filter(Boolean);
+      return temas.length?[{...d,temas,critico:d.estadoEntrega==='vencido'}]:[];
+    }).sort((a,b)=>Number(b.critico)-Number(a.critico)||b.jornada.localeCompare(a.jornada));
+  }
+
+  function tendenciasFoco(semanas) {
+    if (!semanas) return '<p>No se pudieron consultar los indicadores semanales.</p>';
+    if (!semanas.length) return '<p>Todavía no hay semanas iniciadas para mostrar tendencias.</p>';
+    const aPorcentaje = n=>Number.isFinite(n)?n*100:null;
+    const series = semanas.map(s=>{
+      const [,,ppc,cobertura,d1] = razonesSemana(s);
+      return {jornada:s.lunes,parcial:!s.cerrado_en,ppc:aPorcentaje(ppc),
+        avance:aPorcentaje(razonCierre(s.hh_reales,s.hh_programadas)),
+        cobertura:aPorcentaje(cobertura),d1:aPorcentaje(d1)};
+    });
+    return '<p class="muted">Hasta 8 semanas iniciadas. * Semana sin cierre. — Dato no disponible.</p>'+
+      '<div class="tendencias-grid">'+
+      graficoTendencia('PPC semanal','Partidas que alcanzaron su meta semanal de cantidad.',series,'ppc',{periodo:'semanas'})+
+      graficoTendencia('HH reales sobre la meta','HH reales del consolidado divididas por las HH programadas de la semana.',series,'avance',{periodo:'semanas'})+
+      graficoTendencia('Cobertura de envío','Actividades previstas enviadas a ITO sobre el total previsto.',series,'cobertura',{periodo:'semanas'})+
+      graficoTendencia('D+1 a tiempo','Entregas dentro del plazo sobre los reportes evaluables.',series,'d1',{periodo:'semanas'})+'</div>';
+  }
+
+  function mostrarFocoGpro(gestionContrato,semanas,dias,hoy,desde) {
+    const porPlazo = (a,b)=>a.plazo.localeCompare(b.plazo);
+    const pendientes = gestionContrato?.filter(r=>!r.cerrado_en)??[];
+    const compromisos = pendientes.filter(r=>r.tipo==='compromiso'&&r.plazo<=fechaDesde(hoy,7)).sort(porPlazo);
+    const vencidos = compromisos.filter(r=>r.plazo<hoy).length;
+    const restricciones = pendientes.filter(r=>r.tipo==='restriccion').sort(porPlazo);
+    const restriccionesVencidas = restricciones.filter(r=>r.plazo<hoy).length;
+    const jornada = dias ? excepcionesJornadaFoco(dias) : [];
+    const cifra = (destino,n,etiqueta,detalle,atencion)=>'<a class="foco-cifra" href="#'+destino+
+      '" data-atencion="'+Boolean(atencion)+'"><span>'+etiqueta+'</span><strong>'+n+'</strong><small>'+detalle+'</small></a>';
+    const bloque = (id,titulo,cuerpo,gestion)=>'<section class="card" id="'+id+'"><div class="row split"><h3>'+titulo+'</h3>'+
+      (gestion?'<button type="button" data-foco-gestion="'+gestion+'">Ir al registro</button>':'')+'</div>'+cuerpo+'</section>';
+    const lista = items=>'<ul class="foco-lista">'+items.join('')+'</ul>';
+    const tarea = r=>{
+      const diasVencido = Math.round((Date.parse(hoy)-Date.parse(r.plazo))/86400000);
+      const plazo = diasVencido>0?'Plazo vencido hace '+diasVencido+(diasVencido===1?' día':' días'):
+        diasVencido===0?'Vence hoy':'Abierto';
+      const alcance = r.tipo==='restriccion' ?
+        ' · '+(r.lunes?'Semana del '+fechaCorta(r.lunes):'Alcance de contrato')+
+        (r.partidas?.length?' · Ítems '+esc(r.partidas.join(', ')):''):'';
+      return '<li data-critico="'+(diasVencido>0)+'"><strong>'+esc(r.detalle)+'</strong><p>'+esc(r.accion)+
+        '</p><p class="foco-meta">'+esc(r.responsable)+' · '+plazo+' · Plazo '+fechaCorta(r.plazo)+alcance+'</p></li>';
+    };
+    const causas = semanas?.flatMap(s=>(s.causas??[]).map(c=>({causa:[,,,{categoria:c.primaria,hhAtribuidas:c.hh_afectadas}]})));
+    const frecuencia = resumirParetoCnc(causas??[]).filter(g=>g.frecuencia>1)
+      .sort((a,b)=>b.frecuencia-a.frecuencia||b.hh-a.hh||a.primaria.localeCompare(b.primaria,'es')).slice(0,5);
+    datosFocoGpro.innerHTML = '<div class="foco-resumen">'+
+      cifra('foco-compromisos',gestionContrato?vencidos:'—','Compromisos vencidos',
+        gestionContrato?(compromisos.length-vencidos)+' por vencer en 7 días':'Datos no disponibles',vencidos)+
+      cifra('foco-restricciones',gestionContrato?restricciones.length:'—','Restricciones abiertas',
+        gestionContrato?restriccionesVencidas+(restriccionesVencidas===1?' vencida':' vencidas'):'Datos no disponibles',restriccionesVencidas)+
+      cifra('foco-jornadas',dias?jornada.length:'—','Jornadas con excepción','Desde el '+fechaCorta(desde),jornada.length)+'</div>'+
+      bloque('foco-compromisos','Compromisos vencidos o próximos a vencer',
+        !gestionContrato?'<p>No se pudo consultar el registro de compromisos.</p>':compromisos.length?lista(compromisos.map(tarea)):
+          '<p>Sin compromisos pendientes con plazo vencido o dentro de los próximos 7 días.</p>','compromiso')+
+      bloque('foco-restricciones','Restricciones abiertas',
+        !gestionContrato?'<p>No se pudo consultar el registro de restricciones.</p>':restricciones.length?lista(restricciones.map(tarea)):
+          '<p>Sin restricciones abiertas en el contrato.</p>','restriccion')+
+      bloque('foco-jornadas','Jornadas que requieren atención',
+        !dias?'<p>No se pudo consultar la evidencia diaria.</p>':jornada.length?lista(jornada.map(d=>
+          '<li data-critico="'+d.critico+'"><strong>'+fechaCorta(d.jornada)+'</strong><p>'+esc(d.temas.join(' · '))+'</p>'+
+          '<button type="button" data-foco-jornada="'+d.jornada+'">Ver jornada</button></li>')):
+          '<p>Sin excepciones de D+1, cumplimiento u observaciones ITO en el período revisado.</p>')+
+      bloque('foco-tendencias','Tendencias del contrato',tendenciasFoco(semanas))+
+      (frecuencia.length?bloque('foco-causas','CNC recurrentes', '<p class="muted">Categorías repetidas en las semanas mostradas.</p>'+
+        '<ol class="foco-causas">'+frecuencia.map(g=>'<li><strong>'+esc(g.primaria)+'</strong> · '+g.frecuencia+
+          ' CNC'+(g.conHH?' · '+num(g.hh)+' HH atribuidas':'')+'</li>').join('')+'</ol>'):'');
+  }
+
+  async function cargarFocoGpro(vista) {
+    const solicitud = {};
+    vista.solicitudFoco = solicitud;
+    const vigente = ()=>vistaSemana===vista&&vista.solicitudFoco===solicitud&&!panelFocoGpro.hidden;
+    actualizarFocoGpro.disabled = true;
+    datosFocoGpro.replaceChildren();
+    estadoFocoGpro.textContent = 'Consultando indicadores y pendientes…';
+    const corte = Date.now(), hoy = fechaCortaSantiago.format(corte);
+    const dia = new Date(hoy+'T12:00:00Z').getUTCDay();
+    const desde = fechaDesde(hoy,-7-(dia+6)%7);
+    const contrato = '&contrato_codigo=eq.'+encodeURIComponent(vista.codigo);
+    const resultados = await Promise.allSettled([
+      consultarPaginasPiloto('/rest/v1/gpro_gestion_contrato?select=id,tipo,lunes,partidas,detalle,accion,responsable,plazo,cerrado_en'+
+        '&cerrado_en=is.null&order=id.asc&limit=300'+contrato,despuesDeId,vigente),
+      solicitar('/rest/v1/rpc/gpro_consolidado_pyc',{
+        method:'POST',body:JSON.stringify({p_contrato:vista.codigo}),
+      },token).then(r=>r.semanas.filter(s=>s.lunes<=hoy).sort((a,b)=>a.lunes.localeCompare(b.lunes)).slice(-8)),
+      listarJornadasFoco(contrato,desde,hoy,corte,vigente),
+    ]);
+    if (!vigente()) return;
+    actualizarFocoGpro.disabled = false;
+    mostrarFocoGpro(...resultados.map(r=>r.status==='fulfilled'?r.value:null),hoy,desde);
+    estadoFocoGpro.textContent = 'Corte '+hora(corte)+' · Santiago'+
+      (resultados.some(r=>r.status==='rejected')?' · Consulta parcial. Pulsa Actualizar para reintentar.':'');
+  }
+
+  function abrirFocoGpro(vista) {
+    if (vista.perfil!=='GPRO') return;
+    panelSemanas.hidden = true;
+    panelFocoGpro.hidden = false;
+    document.querySelector('#piloto-titulo-foco-gpro').focus();
+    cargarFocoGpro(vista);
+  }
+
+  actualizarFocoGpro.addEventListener('click',()=>cargarFocoGpro(vistaSemana));
+  datosFocoGpro.addEventListener('click',async evento=>{
+    const gestion = evento.target.closest('[data-foco-gestion]')?.dataset.focoGestion;
+    if (gestion) {
+      menuPiloto.querySelector('[data-menu-piloto="'+gestion+'"]').click();
+      return;
+    }
+    const fecha = evento.target.closest('[data-foco-jornada]')?.dataset.focoJornada;
+    const vista = vistaSemana;
+    if (!fecha || vista?.perfil!=='GPRO') return;
+    const jornada = (new Date(fecha+'T12:00:00Z').getUTCDay()+6)%7;
+    panelFocoGpro.hidden = true;
+    const carga = abrirPlan(vista,fechaDesde(fecha,-jornada));
+    const plan = vistaPlanRemoto;
+    await carga;
+    if (vistaSemana!==vista || vistaPlanRemoto!==plan || panelPlan.hidden || !plan?.partidas) return;
+    mostrarVistaSemana('jornadas');
+    await abrirReportePiloto(plan,jornada);
+  });
+
   async function abrirEvolucionPiloto(vista) {
     if (vista?.perfil!=='PyC') return;
     if (!panelGestion.hidden) document.querySelector('#piloto-volver-gestion').click();
@@ -6982,7 +7318,7 @@ const baseReporteGpro=[
     resumenReunion.textContent = 'Consultando indicadores y antecedentes de la reunión…';
     ajustesV3.replaceChildren();
     filasAjustables = null;
-    confirmarAcuerdos.hidden = agregarAcuerdo.hidden = !editar;
+    confirmarAcuerdos.hidden = agregarAcuerdo.hidden = document.querySelector('#piloto-ayuda-acuerdos').hidden = !editar;
     confirmarAcuerdos.disabled = true;
     cancelarAcuerdos.textContent = editar?'Cancelar':'Cerrar';
     listaAcuerdos.innerHTML = editar?'':mostrarAcuerdosCerrados(semana.acuerdos)||
@@ -7714,7 +8050,7 @@ const baseReporteGpro=[
         tabla(['Ítem','Actividad','Unidad','Q Plan','Q ejecutada','Estado y acciones'],lista.map(registro=>{
           const partida = vista.partidas.find(p=>p[0]===registro.item_plan);
           return fila([esc(registro.item_plan??'—'),esc(registro.descripcion)+
-            (partida?'<small class="extra-plan">Recuperación · Plan Semanal</small>':''),esc(registro.unidad),
+            (partida?'<small class="extra-plan">Partida del Plan Semanal</small>':''),esc(registro.unidad),
             partida?num(qDia(partida,jornada)):'—',num(registro.cantidad),celdaRevision(vista,registro)]);
         }).join(''));
       formularioEjecucion.reset();
@@ -8615,6 +8951,8 @@ const baseReporteGpro=[
 
   function cerrarVistaSemanas() {
     cerrarCncContrato();
+    panelFocoGpro.hidden = true;
+    datosFocoGpro.replaceChildren();
     gestion = null;
     panelGestion.hidden = true;
     panelEvolucion.hidden = true;
