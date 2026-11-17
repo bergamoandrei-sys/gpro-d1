@@ -4207,7 +4207,7 @@ const baseReporteGpro=[
         (restricciones && vista.destino === 'jornadas'
           ? '<button type="button" class="status restr-abierta" data-ver-restricciones-jornada="'+jornada+
             '" aria-haspopup="dialog" aria-controls="piloto-restricciones-jornada">Ver restricciones · '+restricciones+'</button>'
-          : restricciones ? '<span class="status restr-abierta">Actividad en riesgo · '+restricciones+'</span>' : '')+
+          : restricciones ? '<span class="status restr-abierta">Restricciones abiertas · '+restricciones+'</span>' : '')+
         (vista.destino === 'reportes' && estado ? '<small>'+estado.porRevisar+' por revisar · '+estado.validados+' validadas · '+
           estado.observados+' observadas</small>' : '')+
         (estado?.cnc?'<small>CNC · '+esc(estadosIto[estado.cnc.estado])+'</small>':'')+
@@ -5080,16 +5080,15 @@ const baseReporteGpro=[
   async function listarGestion(vista, mensaje = '') {
     const filtro = '&contrato_codigo=eq.' + encodeURIComponent(vista.codigo) + '&tipo=eq.' + vista.tipo;
     const ruta = '/rest/v1/gpro_gestion_contrato?select=id,lunes,partidas,detalle,accion,responsable,fecha_registro,plazo,cerrado_en&order=id.asc&limit=500'+filtro+
-      (vista.lunes ? '&lunes=eq.'+vista.lunes : '');
-    const registros = [];
-    let cursor = '';
-    while (true) {
-      const pagina = await solicitar(ruta+(cursor?'&id=gt.'+encodeURIComponent(cursor):''),{},token);
-      if (gestion !== vista || !pagina.length) break;
-      registros.push(...pagina);
-      cursor = pagina.at(-1).id;
-    }
+      (vista.lunes ? '&or=(lunes.is.null,lunes.eq.'+vista.lunes+')' : '');
+    const registros = await consultarPaginasPiloto(ruta,despuesDeId,()=>gestion===vista);
     if (gestion !== vista) return;
+    vista.registros = registros;
+    mostrarGestion(vista,registros);
+    estado.textContent = mensaje;
+  }
+
+  function mostrarGestion(vista,registros) {
     const restriccion = vista.tipo === 'restriccion';
     const hoy = fechaHoy();
     const etiquetas = restriccion ? {vencida:'Abierta · vencida',abierta:'Abierta',cerrada:'Cerrada'} :
@@ -5101,7 +5100,7 @@ const baseReporteGpro=[
     const filas = registros.map(registro => {
       const plan = vista.planes.find(p => p.lunes === registro.lunes);
       const vinculadas = registro.partidas.map(item => {
-        const partida = plan?.partidas.find(p => p[0] === item);
+        const partida = plan?.partidas?.find(p => p[0] === item);
         return esc(partida ? item+' · '+partida[2] : item);
       }).join('<br>');
       const estadoRegistro = grupo(registro);
@@ -5113,14 +5112,13 @@ const baseReporteGpro=[
         registro.cerrado_en ? fechaCorta(fechaCortaSantiago.format(Date.parse(registro.cerrado_en))) : '—',
         accion]);
     });
-    listadoGestion.innerHTML = '<section class="card"><h3>'+(vista.lunes?'Historial de la semana':'Historial del contrato')+
+    listadoGestion.innerHTML = '<section class="card"><h3>'+(vista.lunes?'Historial de la semana y alcance general':'Historial del contrato')+
       '</h3><div class="row restr-resumen">'+Object.entries(etiquetas).map(([k,texto])=>
         badge(k,registros.filter(r=>grupo(r)===k).length+' · '+texto)).join('')+'</div>'+
       (filas.length ? tabla(['Estado',restriccion?'Restricción':'Compromiso',restriccion?'Acción de resolución':'Acción acordada','Responsable',
         ...(restriccion?['Partidas vinculadas','Semana']:[]),'Registro','Fecha comprometida',
         restriccion?'Fecha de cierre':'Fecha de cumplimiento','Acción'],filas.join('')) :
         '<p>'+(restriccion?'Aún no hay restricciones registradas.':'Aún no hay compromisos registrados.')+'</p>')+'</section>';
-    estado.textContent = mensaje;
   }
 
   function mostrarPartidasRestriccion() {
@@ -5154,6 +5152,7 @@ const baseReporteGpro=[
       if (!remoto) throw Error('El plan de esa semana ya no está disponible.');
       plan.partidas = remoto.partidas;
       mostrarPartidasRestriccion();
+      if (vista.registros) mostrarGestion(vista,vista.registros);
       estado.textContent = 'Partidas disponibles para vincular.';
     } catch (error) {
       if (vigente()) estado.textContent = 'No se pudieron consultar las partidas. Vuelve a seleccionar la semana. '+mensajeGestion(error);
@@ -5195,14 +5194,14 @@ const baseReporteGpro=[
     tituloGestion.focus();
     estado.textContent = 'Consultando registros…';
     try {
-      if (tipo === 'restriccion') {
-        vista.planes = origen ? [{lunes:origen.lunes, partidas:origen.partidas}] : await consultarPaginasPiloto(
+      if (origen) vista.planes = [{lunes:origen.lunes, partidas:origen.partidas}];
+      const consultaPlanes = tipo==='restriccion' && !origen ? consultarPaginasPiloto(
           '/rest/v1/gpro_planes_semanales?select=lunes&order=lunes.asc&limit=500&contrato_codigo=eq.'+encodeURIComponent(vista.codigo),
-          despuesDeLunes,()=>gestion===vista);
-        vista.planes.reverse();
-      }
-      await listarGestion(vista);
+          despuesDeLunes,()=>gestion===vista).catch(()=>null) : vista.planes;
+      const [planes] = await Promise.all([consultaPlanes,listarGestion(vista)]);
       if (gestion !== vista) return;
+      if (planes) vista.planes = [...planes].reverse();
+      else estado.textContent = 'Las restricciones están disponibles. No se pudieron consultar las semanas para vincular partidas.';
       const restriccion = tipo === 'restriccion';
       formularioGestion.reset();
       vinculoRestriccion.hidden = vinculoRestriccion.disabled = !restriccion;
@@ -5282,7 +5281,11 @@ const baseReporteGpro=[
     if (origen) {
       panelPlan.hidden = false;
       restriccionesSemana.focus();
-      if (origen.jornada) cargarAlertasRestriccion(origen, origen.jornada);
+      if (!reporteAbierto.hidden && origen.jornada) {
+        cargarAlertasRestriccion(origen, origen.jornada);
+      } else if (origen.destino==='jornadas') {
+        cargarRestriccionesJornadas(origen);
+      }
     }
     else { panelSemanas.hidden = false; tituloSemanas.focus(); }
     estado.textContent = '';
@@ -7681,23 +7684,22 @@ const baseReporteGpro=[
   async function consultarRestriccionesJornadas(vista) {
     const ruta = '/rest/v1/gpro_gestion_contrato?select=id,lunes,partidas,detalle,accion,responsable,plazo'+
       '&tipo=eq.restriccion&cerrado_en=is.null&order=id.asc&limit=500'+
-      '&contrato_codigo=eq.'+encodeURIComponent(vista.codigo)+'&lunes=lte.'+vista.lunes;
-    const abiertas = [];
-    let cursor = '';
-    while (vistaPlanRemoto===vista) {
-      const pagina = await solicitar(ruta+(cursor?'&id=gt.'+encodeURIComponent(cursor):''),{},token);
-      if (!pagina.length) break;
-      abiertas.push(...pagina);
-      cursor = pagina.at(-1).id;
-    }
+      '&contrato_codigo=eq.'+encodeURIComponent(vista.codigo)+'&or=(lunes.is.null,lunes.lte.'+vista.lunes+')';
+    const abiertas = await consultarPaginasPiloto(ruta,despuesDeId,()=>vistaPlanRemoto===vista);
     return diasSemana.map((_,d)=>{
       const programadas = new Map(vista.partidas.filter(p=>qDia(p,d)>0||hhDia(p,d)>0).map(p=>[p[0],p[2]]));
       return abiertas.flatMap(restriccion=>{
+        if (!restriccion.partidas.length) return restriccion.lunes===null || restriccion.lunes===vista.lunes
+          ? [{restriccion,partidas:[]}] : [];
         const partidas = restriccion.partidas.filter(item=>programadas.has(item))
           .map(item=>item+' · '+programadas.get(item));
         return partidas.length?[{restriccion,partidas}]:[];
       }).sort((a,b)=>a.restriccion.plazo.localeCompare(b.restriccion.plazo));
     });
+  }
+
+  function alcanceRestriccionJornada(restriccion) {
+    return restriccion.lunes ? 'Alcance semanal' : 'Alcance del contrato';
   }
 
   reintentarRestricciones.addEventListener('click', () => {
@@ -7732,7 +7734,7 @@ const baseReporteGpro=[
     if (!aplicables?.length || dialogoRestriccionesJornada.open) return;
     const hoy = fechaHoy();
     const filas = aplicables.map(({restriccion, partidas}) => fila([
-      partidas.map(esc).join('<br>'),
+      partidas.length ? partidas.map(esc).join('<br>') : alcanceRestriccionJornada(restriccion),
       esc(restriccion.detalle),
       esc(restriccion.accion),
       esc(restriccion.responsable),
@@ -7756,9 +7758,9 @@ const baseReporteGpro=[
       const aplicables = porDia[consulta.jornada];
       if (!aplicables.length) return;
       const hoy = fechaHoy();
-      alertasRestriccion.innerHTML = '<h4>Actividad en riesgo · Restricciones abiertas</h4><ul>'+aplicables.map(({restriccion:r, partidas}) =>
+      alertasRestriccion.innerHTML = '<h4>Restricciones abiertas</h4><ul>'+aplicables.map(({restriccion:r, partidas}) =>
         '<li><strong>'+esc(r.detalle)+'</strong><p>'+(
-          partidas.length ? partidas.map(esc).join(', ') : 'Alcance semanal'
+          partidas.length ? partidas.map(esc).join(', ') : alcanceRestriccionJornada(r)
         )+'</p><p>'+esc(r.accion)+' · '+esc(r.responsable)+' · '+esc(fechaCorta(r.plazo))+
         (r.plazo < hoy ? ' · Vencida' : '')+'</p></li>'
       ).join('')+'</ul>';
