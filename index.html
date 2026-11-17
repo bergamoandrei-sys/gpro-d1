@@ -478,8 +478,6 @@ button[aria-busy="true"]::before {content:"";display:inline-block;width:.75em;he
 .cierre-q-formularios small{color:#47586d}
 .variacion-q-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:8px;align-items:start}
 .variacion-q-kpi{margin:0;background:#f2f7fc}
-.variacion-q-kpi summary span,.variacion-q-kpi summary small{display:block;margin:3px 0 0 15px}
-.variacion-q-kpi summary span{font-size:1.55rem;color:#174c84;font-weight:700}
 .variacion-q-kpi .variacion-q-operacion{font-weight:650}
 .variacion-q-detalle{min-width:75px}
 .variacion-q-detalle[open]{min-width:215px}
@@ -643,11 +641,11 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
 .consolidado-matriz tfoot tr:first-child :where(th,td){border-top:2px solid #b4c6db}
 
 #evolucion-q tbody td:nth-child(n+3),
-#variacion-semanal-q tbody td:nth-last-child(-n+5){text-align:right}
+.variacion-semanal-q tbody td:nth-last-child(-n+5){text-align:right}
 #evolucion-q tbody td:last-child,
-#variacion-semanal-q tbody td:last-child{color:#1d4778;font-weight:700}
+.variacion-semanal-q tbody td:last-child{color:#1d4778;font-weight:700}
 #evolucion-q td details[open],
-#variacion-semanal-q td details[open]{text-align:left;font-weight:400}
+.variacion-semanal-q td details[open]{text-align:left;font-weight:400}
 
 @media(max-width:600px){
   table :where(th,td){padding:8px 9px}
@@ -663,7 +661,6 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
 .piloto-acceso :is(#piloto-listado,#piloto-listado-semanas) li{margin-bottom:8px}
 .piloto-acceso:has(#piloto-plan:not([hidden])){max-width:1120px}
 .piloto-acceso #piloto-tabla-plan{overflow:auto;margin:12px 0}
-.piloto-acceso #piloto-tabla-plan input{width:7ch}
 #piloto-pendientes-ito{margin:16px 0}
 #piloto-pendientes-ito button{white-space:nowrap}
 #piloto-ppc-jornadas .pendientes-oficina{line-height:1.4}
@@ -969,6 +966,66 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
   #piloto .marca-gpro{gap:5px}
   #piloto .resumen-cifras>div{padding-inline:6px}
 }
+
+#piloto-tabla-plan{overflow-x:auto}
+#piloto-tabla-plan .plan-ayuda{margin:6px 0 12px;color:#3e536c}
+#piloto-tabla-plan .plan-grupo-dia{text-align:center;background:#dceaf5}
+#piloto-tabla-plan :is(th,td){white-space:nowrap}
+#piloto-tabla-plan input{box-sizing:border-box;width:6.25rem}
+#piloto-tabla-plan input[data-columna="2"]{width:16rem}
+#piloto-tabla-plan input[data-columna="12"]{width:8rem}
+#piloto-tabla-plan .plan-hh{background:#f0f5f8;text-align:right;font-variant-numeric:tabular-nums}
+#piloto-ejecucion [name="item_plan"]{max-width:100%}
+#piloto-ejecucion input[readonly]{background:#edf3f8;color:#253e54}
+#piloto .extra-plan{display:block;color:#175f54;font-weight:650}
+#piloto .observacion-reporte:not([hidden]){display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-block:12px;padding:12px 16px}
+#piloto :is(.observacion-reporte,.detalle-observacion){background:#fff0e7;color:#802b15;border:1px solid #ecbda9;border-inline-start:4px solid #ad4425;border-radius:8px}
+#piloto .detalle-observacion{padding:8px 11px;margin:8px 0;white-space:normal;overflow-wrap:anywhere}
+#piloto :is(.detalle-observacion,.nota-observacion) strong{display:block;margin-bottom:3px}
+#piloto :is(.aviso-observacion,[data-observaciones-tab]){background:#ffe7da;color:#802b15;font-weight:750;padding:3px 7px;border-radius:5px;width:fit-content}
+#piloto .observacion-reporte button{color:#802b15;border-color:#d69882}
+#piloto-reporte-abierto[data-perfil="ITO"] #piloto-vistas-reporte{grid-template-columns:repeat(2,minmax(0,1fr))}
+#piloto #piloto-vistas-reporte [data-observaciones-tab]{margin-inline:auto}
+#piloto-reporte-abierto[data-perfil="ITO"] #piloto-vistas-reporte button{
+  min-height:62px;font-size:clamp(1rem,2.4vw,1.25rem);font-weight:750;text-align:center
+}
+.variacion-semanal-q .variacion-valor{display:block;margin:6px 0;color:#214c77;font-size:1.65rem;font-weight:750;font-variant-numeric:tabular-nums}
+.variacion-semanal-q .variacion-lectura{line-height:1.45;margin:6px 0 12px;color:#374d60}
+#piloto-matriz-consolidado tbody .consolidado-prog:not(.consolidado-semanal){color:#334c62}
+#piloto-matriz-consolidado thead tr:first-child .consolidado-semanal,
+#piloto-matriz-consolidado tfoot tr:last-child :is(th,td){background:#203b55;color:#fff}
+#piloto-matriz-consolidado tfoot tr:last-child small{color:inherit}
+#piloto-matriz-consolidado .matriz-faltante{display:block;width:fit-content;margin:4px 0 0 auto;padding:2px 6px;border-radius:4px;background:#fff0d6;color:#79480a;font-weight:700}
+#piloto-form-acuerdos{grid-template-columns:minmax(0,1fr)}
+#piloto-form-acuerdos :is(.card,.scroll){min-width:0}
+#piloto-resumen-reunion .cierre-portada{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px;background:#17354e;color:#fff;padding:14px 18px;border-radius:10px;margin-bottom:12px}
+#piloto-resumen-reunion .cierre-portada :is(h4,p){margin:4px 0 0;color:inherit}
+#piloto-resumen-reunion .cierre-portada .muted{color:#e2edf6}
+#piloto-resumen-reunion .cierre-estado{font-size:.9rem;font-weight:650;color:#d0e7dd}
+#piloto-resumen-reunion .cierre-seccion{padding:16px}
+#piloto-resumen-reunion .cierre-seccion h4{font-size:1.15rem;margin:0 0 12px}
+#piloto-resumen-reunion .cierre-seccion h5{font-size:.96rem;margin:12px 0 8px}
+#piloto-resumen-reunion :is(.cierre-cifras,.cierre-jornadas){display:grid;gap:8px;margin:10px 0 14px}
+#piloto-resumen-reunion .cierre-cifras{grid-template-columns:repeat(auto-fit,minmax(min(100%,128px),1fr))}
+#piloto-resumen-reunion .cierre-jornadas{grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
+#piloto-resumen-reunion .cierre-cifra,#piloto-resumen-reunion .cierre-dia{min-width:0;border:1px solid #dce6ee;border-radius:8px;padding:8px 10px;background:#f6f9fc}
+#piloto-resumen-reunion .cierre-cifra dt{color:#384f63;font-size:.84rem}
+#piloto-resumen-reunion .cierre-cifra dd{font-size:1.43rem;font-weight:750;line-height:1.25;margin:4px 0 0;font-variant-numeric:tabular-nums}
+#piloto-resumen-reunion .cierre-atencion{background:#fff5e4;border-color:#e4c891;color:#784507}
+#piloto-resumen-reunion .cierre-avance{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr));align-items:center;gap:12px;padding:10px 12px;border:1px solid #dce6ee;border-radius:8px}
+#piloto-resumen-reunion .cierre-barra{display:grid;grid-template-columns:1fr auto;gap:3px 5px;align-items:baseline;font-size:.86rem}
+#piloto-resumen-reunion .cierre-barra i{grid-column:1/-1;height:6px;border-radius:4px;background:#dce7ef;overflow:hidden}
+#piloto-resumen-reunion .cierre-barra i span{display:block;height:100%;background:#287d67}
+#piloto-resumen-reunion .cierre-avance .cierre-barra:first-child i span{background:#356b9e}
+#piloto-resumen-reunion .cierre-delta{display:grid;line-height:1.35}
+#piloto-resumen-reunion .cierre-delta strong{font-size:1.2rem}
+#piloto-resumen-reunion .cierre-dia h5{display:flex;justify-content:space-between;gap:5px;margin:0 0 6px}
+#piloto-resumen-reunion .cierre-dia :is(p,time){color:#465e72;font-size:.82rem}
+#piloto-resumen-reunion .cierre-dia .cierre-barra+.cierre-barra{margin-top:6px}
+#piloto-resumen-reunion .cierre-entrega{display:inline-block;padding:3px 6px;border-radius:4px;background:#e8edf2;color:#344a61;font-size:.8rem;font-weight:650}
+#piloto-resumen-reunion .cierre-entrega[data-entrega="a-tiempo"]{background:#dff2e8;color:#16593d}
+#piloto-resumen-reunion .cierre-entrega:is([data-entrega="tarde"],[data-entrega="vencido"]){background:#ffe9d4;color:#7b3909}
+#piloto-resumen-reunion .cierre-hallazgo{padding:9px 11px;background:#fff5e4;border-inline-start:3px solid #b77a30;border-radius:4px}
 </style>
 </head>
 <body>
@@ -1218,7 +1275,7 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
             <h3 id="piloto-titulo-acuerdos">Reunión de cierre semanal</h3>
             <p id="piloto-semana-acuerdos"></p>
             <div id="piloto-resumen-reunion" aria-live="polite"></div>
-            <h4>4. Decisiones de reunión</h4>
+            <h4>Decisiones de reunión</h4>
             <div id="piloto-ajustes-v3"></div>
             <div id="piloto-lista-acuerdos"></div>
             <p id="piloto-error-acuerdos" role="alert"></p>
@@ -1320,7 +1377,6 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
         <ul id="piloto-avisos-plan" hidden></ul>
          <div class="row" id="piloto-acciones-plan" hidden>
            <button type="button" class="primary" id="piloto-guardar-plan" hidden>Guardar plan semanal</button>
-           <button type="button" id="piloto-completar-q-vacias" hidden>Usar 0 en Q vacías</button>
          </div>
         <details id="piloto-plan-confirmado" class="card plan-confirmado" hidden>
           <summary>Plan Semanal confirmado · Ver tabla completa y rendimiento</summary>
@@ -1358,6 +1414,7 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
             </div>
           </div>
           <p id="piloto-estado-descarga-diaria" role="status" hidden></p>
+          <aside id="piloto-observaciones-reporte" class="observacion-reporte" aria-live="polite" hidden></aside>
           <div id="piloto-progreso-reporte" class="card row" aria-label="Progreso del reporte diario" hidden></div>
           <section class="card" id="piloto-preparar-pod" hidden></section>
           <div id="piloto-vistas-reporte" class="reporte-oficina-tabs" role="group" aria-label="Vista del reporte">
@@ -1379,6 +1436,10 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
           <div id="piloto-actividades-vacias"></div>
           <form id="piloto-ejecucion" class="card" hidden>
             <h3>Actividad fuera del POD</h3>
+            <label>Origen de la actividad
+              <select name="item_plan"><option value="">Actividad fuera del Plan Semanal</option></select>
+            </label>
+            <p data-ayuda-extra class="muted" hidden>La cantidad aporta al cumplimiento de la partida en la semana y queda registrada en la jornada de ejecución.</p>
             <div class="row">
               <label>Descripción <input name="descripcion" maxlength="500" required></label>
               <label>Unidad <input name="unidad" maxlength="60" required></label>
@@ -1588,11 +1649,6 @@ const qDia=(a,d)=>qOperativa(qDiaOriginal(a,d))??0;
 const hhDia=(a,d)=>a?.[5+d*2]??0;
 
 const sumaDias=(a,campo,hasta=3)=>diasSemana.slice(0,hasta+1).reduce((s,_,i)=>s+campo(a,i),0);
-
-const rendimiento=a=>{
-  const cantidad=sumaDias(a,qDiaOriginal);
-  return cantidad>0?sumaDias(a,hhDia)/cantidad:'';
-};
 
 const origenActividad=r=>r[10]??'pod';
 
@@ -2491,14 +2547,20 @@ function tablaVariacionSemanal(filas,incluirSemana){
   }).join(''));
 }
 
-function panelVariacionQ(filas,enConsolidado=false){
+function panelVariacionQ(filas,cierre=null){
+  const enConsolidado=cierre!==null;
   const r=resumenVariacionQ(filas),porc=porcentajeVariacion;
-  const tarjeta=(titulo,valor,formula,operacion)=>'<details class="card variacion-q-kpi"><summary><strong>'+titulo+
-    '</strong><span>'+porc(valor)+'</span><small>Ver cálculo</small></summary><p>'+formula+'</p>'+
-    (r.n?'<p class="variacion-q-operacion">'+operacion+'</p>':'<p>Sin partidas comparables para calcularlo.</p>')+'</details>';
-  return '<section class="'+(enConsolidado?'card':'metrica-panel')+'" id="variacion-semanal-q"><h2>Variación semanal de Q por partida</h2>'+
+  const disponible=r.n>0;
+  const tarjeta=(titulo,valor,lectura,formula,operacion)=>'<div class="card variacion-q-kpi"><strong>'+titulo+
+    '</strong><span class="variacion-valor">'+porc(valor)+'</span><p class="variacion-lectura">'+
+    (disponible?lectura:'Sin partidas comparables para calcularlo.')+'</p>'+
+    (disponible?'<details><summary>Ver cálculo</summary><p>'+formula+'</p><p class="variacion-q-operacion">'+
+      operacion+'</p></details>':'')+'</div>';
+  return '<section class="variacion-semanal-q '+(enConsolidado?'card':'metrica-panel')+'"'+
+    (enConsolidado?'':' id="variacion-semanal-q"')+'>'+
+    (enConsolidado?'<h4>Variación semanal por partida</h4>':'<h2>Variación semanal de Q por partida</h2>')+
     '<p class="muted">Suma las cantidades de lunes a jueves por partida y unidad. V3 usa el ajuste de cada jornada cuando existe y V2 en las demás.</p>'+
-    (enConsolidado?(datos.cierreConsolidadoQ?'':'<p class="muted">Resultado provisional mientras la semana siga abierta.</p>'):
+    (enConsolidado?(cierre?'':'<p class="muted">Resultado provisional mientras la semana siga abierta.</p>'):
       '<p class="muted">El filtro incluye la semana completa de cada jornada seleccionada, incluidas las semanas en curso.</p>')+
     (filas.length?tablaVariacionSemanal(filas,!enConsolidado)+
       '<p class="muted">Las fracciones junto a una cantidad indican registros disponibles del total esperado. El APE requiere V1 y cantidad final completas, con V1 mayor que cero.</p>':
@@ -2506,9 +2568,13 @@ function panelVariacionQ(filas,enConsolidado=false){
     '<h3>Indicadores de variación</h3><p><strong>'+r.n+' de '+filas.length+
     ' partidas semanales comparables</strong> · Cada partida y semana pesa lo mismo.</p>'+
     '<div class="variacion-q-kpis">'+
-    tarjeta('MAPE',r.mape,'Suma de los APE semanales ÷ partidas semanales comparables.',porc(r.sumaAPE)+' ÷ '+r.n+' = '+porc(r.mape))+
-    tarjeta('Precisión',r.precision,'100 % − MAPE.', '100 % − '+porc(r.mape)+' = '+porc(r.precision))+
-    tarjeta('Sesgo',r.sesgo,'Promedio de la variación semanal con signo (V3 − V1) ÷ V1.',
+    tarjeta('MAPE',r.mape,'En promedio, el primer reporte difiere '+porc(r.mape)+' de la cantidad final, contando la magnitud de las diferencias en ambas direcciones.',
+      'Promedio del error porcentual absoluto por partida.',porc(r.sumaAPE)+' ÷ '+r.n+' = '+porc(r.mape))+
+    tarjeta('Precisión',r.precision,'La precisión baja a medida que crece el error. Con un error promedio del 10 %, la precisión es 90 %.',
+      '100 % − MAPE.', '100 % − '+porc(r.mape)+' = '+porc(r.precision))+
+    tarjeta('Sesgo',r.sesgo,r.sesgo===0?'Las diferencias hacia arriba y hacia abajo se compensan en promedio.':
+      'En promedio, la cantidad final quedó '+porc(Math.abs(r.sesgo))+(r.sesgo>0?' por encima':' por debajo')+' del primer envío.',
+      'Promedio de la variación semanal con signo (V3 − V1) ÷ V1.',
       porc(r.sumaVariacion)+' ÷ '+r.n+' = '+porc(r.sesgo))+'</div></section>';
 }
 
@@ -2695,8 +2761,7 @@ function opcionesPlanGpro(hoja,date1904,lunesDestino){
       nombresSimples.some((titulo,i)=>columnas[i]>=0&&nombres.lastIndexOf(titulo)!==columnas[i])) continue;
     const registros=filas.filter(r=>r.numero>encabezado.numero&&columnas.some(i=>tiene(r.valores[i])));
     const partidas=registros.map(r=>columnas.map((i,j)=>j>=4?medicionExcel(r.valores[i]):r.valores[i]??''));
-    const vaciosQ=partidas.flatMap((fila,i)=>[4,6,8,10].filter(j=>fila[j]==='').map(j=>[i,j,fila[j+1]==='']));
-    return [{hoja:nombre,formato:'Plantilla simple',lunes:lunesDestino,filas:partidas,vaciosQ,usaSemanaSeleccionada:true,
+    return [{hoja:nombre,formato:'Plantilla simple',lunes:lunesDestino,filas:partidas,usaSemanaSeleccionada:true,
       avisos:['La plantilla simple usa la semana seleccionada en GPRO. Comprueba el lunes antes de guardar.'],
       referencias:registros.map(r=>r.numero),mapeo:columnas.map((i,j)=>i<0?'':cabecera[j]+': '+columnaExcel(i)).filter(Boolean).join(' · ')}];
   }
@@ -2729,46 +2794,30 @@ function opcionesPlanGpro(hoja,date1904,lunesDestino){
   for(const lunes of semanas){
     const seleccion=diasDeLunes(lunes).map(f=>dias.find(d=>d.fecha===f));
     if(seleccion.some(d=>!d))continue;
-    const avisos=[],referencias=[],registros=[],vaciosQ=[];
+    const avisos=[],referencias=[],registros=[];
     const fueraDeJornadas=dias.filter(d=>d.fecha>seleccion.at(-1).fecha&&d.fecha<=fechaDesde(lunes,6));
     let programacionExcluida=false;
-    let hhCalculadas=0,problemas=0;
     for(const r of cuerpo){
       const a=r.valores;
       // Las filas FDP pertenecen a ejecución, no a la programación de entrada.
       if(norm(a[0])==='FDP'||norm(a[0])==='X'){avisos.push('Fila '+r.numero+': actividad marcada FDP omitida del plan.');continue;}
       if(fueraDeJornadas.some(d=>numeroPlan(a[d.q]??'')>0||numeroPlan(a[d.hh]??'')>0)) programacionExcluida=true;
       const resultado=[a[colItem]??'',a[colArea]??'',a[colDesc]??'',a[colUnidad]??''];
-      const valorTasa=medicionExcel(a[colRend]);
-      const tasa=valorTasa!==''?numeroPlan(valorTasa):NaN;
       for(const d of seleccion){
-        const celda=String(medicionExcel(a[d.q])).trim(),q=numeroPlan(celda);
-        let valorQ=celda;
-        const totalCelda=String(medicionExcel(a[colTotalQ])).trim(),totalQ=numeroPlan(totalCelda);
-        const sospechosa=totalCelda!==''&&Number.isFinite(totalQ)&&totalQ>=0&&q>totalQ+1e-8*Math.max(1,totalQ);
-        if(sospechosa){valorQ='';avisos.push('Fila '+r.numero+' · '+columnaExcel(d.q)+': Q '+num(q)+' supera el total de programación '+num(totalQ)+'. Revisa la fórmula original y completa Q/HH manualmente.');}
-        let hh=d.hh>=0?String(medicionExcel(a[d.hh])).trim():'';
-        if(celda==='') vaciosQ.push([registros.length,resultado.length,hh==='']);
-        if(celda!==''&&hh===''&&Number.isFinite(q)){
-          if(q===0)hh=0;
-          else if(Number.isFinite(tasa)&&tasa>0){hh=q*tasa;hhCalculadas++;}
-        }
-        if(sospechosa)hh='';
-        if(sospechosa||celda===''||!Number.isFinite(q)||q<0||hh===''||!Number.isFinite(numeroPlan(hh))||numeroPlan(hh)<0){
-          avisos.push('Fila '+r.numero+' · '+d.fecha+': revisa Q/HH; hay un dato faltante o error de Excel.');problemas++;
-        }
-        resultado.push(valorQ,hh);
+        const valorQ=medicionExcel(a[d.q]),q=numeroPlan(valorQ);
+        const totalCelda=medicionExcel(a[colTotalQ]),totalQ=numeroPlan(totalCelda);
+        if(totalCelda!==''&&Number.isFinite(totalQ)&&totalQ>=0&&q>totalQ+1e-8*Math.max(1,totalQ))
+          avisos.push('Fila '+r.numero+' · '+columnaExcel(d.q)+': Q '+num(q)+' supera el total del Excel ('+num(totalQ)+'). Revisa la cantidad.');
+        resultado.push(valorQ,medicionExcel(a[d.hh]));
       }
-      resultado.push(Number.isFinite(tasa)?tasa:valorTasa.startsWith?.('#REVISAR')?valorTasa:'');
+      resultado.push(medicionExcel(a[colRend]));
       referencias.push(r.numero);registros.push(resultado);
     }
-    if(hhCalculadas)avisos.unshift(hhCalculadas+' valores diarios de HH calculados con Q programada × rendimiento.');
-    if(!seleccion.some(d=>d.hh>=0))avisos.unshift('Este formato no tiene HH programadas por día: se calculan con su rendimiento fijo.');
     if(registros.length&&!registros.some(r=>r.slice(4,12).some(v=>numeroPlan(v)>0)))avisos.push('La selección de lunes a jueves no tiene programación positiva. El archivo puede programar solo el fin de semana.');
     if(dias.some(d=>!seleccion.includes(d)))avisos.push('Se importa solo lunes a jueves de esta semana. Viernes, sábado, domingo y fechas de otras semanas quedan fuera.');
     if(programacionExcluida)avisos.push('Este Excel contiene programación de viernes a domingo que quedará fuera del plan.');
-    opciones.push({hoja:nombre,contratoOrigen,formato:seleccion.some(d=>d.hh>=0)?'GPRO · Q y HH diarias':'GPRO · Q diaria y rendimiento',lunes,filas:registros,avisos:[...new Set(avisos)],referencias,vaciosQ,programacionExcluida,
-      mapeo:'Ítem '+columnaExcel(colItem)+' · Área '+columnaExcel(colArea)+' · Actividad '+columnaExcel(colDesc)+' · Unidad '+columnaExcel(colUnidad)+' · '+seleccion.map(d=>d.fecha+': Q '+columnaExcel(d.q)+(d.hh>=0?' / HH '+columnaExcel(d.hh):' / HH = Q × '+columnaExcel(colRend))).join(' · '),problemas});
+    opciones.push({hoja:nombre,contratoOrigen,formato:seleccion.some(d=>d.hh>=0)?'GPRO · Q y HH diarias':'GPRO · Q diaria y rendimiento',lunes,filas:registros,avisos:[...new Set(avisos)],referencias,programacionExcluida,
+      mapeo:'Ítem '+columnaExcel(colItem)+' · Área '+columnaExcel(colArea)+' · Actividad '+columnaExcel(colDesc)+' · Unidad '+columnaExcel(colUnidad)+' · '+seleccion.map(d=>d.fecha+': Q '+columnaExcel(d.q)+(d.hh>=0?' / HH '+columnaExcel(d.hh):' / HH = Q × '+columnaExcel(colRend))).join(' · ')});
   }
   return opciones;
 }
@@ -2804,9 +2853,15 @@ async function leerPlan(buffer,paraRevision=false,lunesDestino=datos.lunes){
   }
   if(!opciones.length)throw Error('La primera hoja visible no contiene encabezados y fechas válidas. Ubica allí el Plan Semanal y recalcula las fórmulas antes de guardar.');
   for(const opcion of opciones){
-    if(opcion.filas.some(f=>f.slice(4).some(v=>String(v).startsWith('#REVISAR'))))
-      opcion.avisos.push('Revisa los números marcados. Escribe, por ejemplo, 1234 o 1,23. Si el número ambiguo está en Rendimiento, corrígelo en Excel y vuelve a importar.');
-    opcion.filas=opcion.filas.map(f=>f.map((v,i)=>i>=4&&i<12?decimalPlanVisible(v):v));
+    opcion.filas=opcion.filas.map(f=>{
+      const pares = [4,6,8,10].map(i=>[f[i],f[i+1]].map(v=>tiene(v)?numeroPlan(v):NaN))
+        .filter(([q,hh])=>q>0&&hh>=0&&Number.isFinite(q)&&Number.isFinite(hh));
+      const derivado = pares.length ? pares.reduce((s,[,hh])=>s+hh,0)/pares.reduce((s,[q])=>s+q,0) : '';
+      const tasa = tiene(f[12]) ? f[12] : derivado;
+      return [...f.slice(0,4),...f.slice(4,12).map((v,i)=>i%2===0?decimalPlanVisible(v):''),tasa];
+    });
+    if(opcion.filas.some(f=>[4,6,8,10,12].some(i=>String(f[i]).startsWith('#'))))
+      opcion.avisos.push('Corrige en la tabla los valores marcados con #. Para números ambiguos, escribe por ejemplo 1234 o 1,23.');
   }
   const indice=Math.max(0,opciones.findIndex(o=>o.lunes===lunesDestino));
   if(paraRevision)return {opciones,indice};
@@ -2833,26 +2888,44 @@ function decimalPlanVisible(v){
   return texto&&Number.isFinite(n)&&n>=0?String(n).replace('.',','):texto;
 }
 
+function hhDesdeRendimiento(cantidad, tasa) {
+  if (!Number.isFinite(cantidad) || cantidad < 0) return null;
+  if (cantidad===0) return 0;
+  if (!Number.isFinite(tasa) || tasa < 0) return null;
+  const hh = redondear2(cantidad * tasa);
+  return hh <= 99999999999999.99 ? hh : null;
+}
+
+
+function hhProgramadasPlan(q,tasa){
+  const hh = hhDesdeRendimiento(cantidadPlan(q),numeroPlan(tasa));
+  return hh !== null && hh >= 0 ? hh : null;
+}
+
 function validarPlan(filas){
   if(!filas.length)throw Error('El plan debe incluir al menos una actividad.');
   const items=new Set();
+  const maximo=99999999999999.99;
   return filas.map((fila,n)=>{
-    if(String(fila[12]??'').startsWith('#REVISAR')) throw Error('Actividad '+(n+1)+': corrige el rendimiento ambiguo en Excel y vuelve a importar.');
-    if(fila.slice(4,12).some(v=>String(v).startsWith('#REVISAR')))
-      throw Error('Actividad '+(n+1)+': aclara los números marcados antes de guardar. Escribe, por ejemplo, 1234 o 1,23.');
-    const [item,area,descripcion,unidad]=fila.slice(0,4).map(v=>String(v).trim());
-    const cantidades=fila.slice(4,12).map(cantidadPlan);
-    if(!item||!area||!descripcion||!unidad||[item,area,descripcion,unidad].some(v=>v.startsWith('#'))||
-      cantidades.length!==8||cantidades.some(v=>!Number.isFinite(v)||v<0||v>99999999999999.99))
-      throw Error('Actividad '+(n+1)+': completa ítem, área, descripción y unidad, y usa Q y HH dentro del rango admitido.');
-    if(fila.slice(4,12).some(v=>v===''||String(v).startsWith('#')))throw Error('Actividad '+(n+1)+': completa las cantidades y HH pendientes. Usa 0 solo cuando corresponda.');
-    if(items.has(item)) throw Error('Actividad '+(n+1)+': el ítem '+item+' está repetido. Usa una fila por actividad.');
+    const prefijo='Actividad '+(n+1)+': ';
+    const [item,area,descripcion,unidad]=fila.slice(0,4).map(v=>String(v??'').trim());
+    if(!item||!area||!descripcion||!unidad||[item,area,descripcion,unidad].some(v=>v.startsWith('#')))
+      throw Error(prefijo+'completa ítem, área, descripción y unidad.');
+    if(descripcion.length>500||unidad.length>60)
+      throw Error(prefijo+'la descripción admite 500 caracteres y la unidad 60.');
+    if(items.has(item)) throw Error(prefijo+'el ítem '+item+' está repetido. Usa una fila por actividad.');
     items.add(item);
-    const a=[item,area,descripcion,unidad,...cantidades];
-    const derivado=rendimiento(a);
-    const tasa=tiene(derivado)?derivado:(tiene(fila[12])?numeroPlan(fila[12]):'');
-    if(tiene(tasa)&&(!Number.isFinite(tasa)||tasa<0||tasa>99999999999999.99))throw Error('Actividad '+(n+1)+': rendimiento inválido.');
-    return [...a,Number.isFinite(tasa)?tasa:''];
+    const tasa=numeroPlan(fila[12]??'');
+    if(!Number.isFinite(tasa)||tasa<0||tasa>maximo)
+      throw Error(prefijo+'corrige el rendimiento (HH/unidad).');
+    const cantidades=[4,6,8,10].flatMap((i,d)=>{
+      const q=cantidadPlan(fila[i]??'');
+      const hh=hhProgramadasPlan(q,tasa);
+      if(!Number.isFinite(q)||q<0||q>maximo||hh===null)
+        throw Error(prefijo+'revisa la Q de '+diasSemana[d]+' y sus HH calculadas.');
+      return [q,hh];
+    });
+    return [item,area,descripcion,unidad,...cantidades,tasa];
   });
 }
 
@@ -3559,7 +3632,6 @@ const baseReporteGpro=[
   const avisosPlan = document.querySelector('#piloto-avisos-plan');
   const tablaPlan = document.querySelector('#piloto-tabla-plan');
   const botonGuardar = document.querySelector('#piloto-guardar-plan');
-  const completarQVacias = document.querySelector('#piloto-completar-q-vacias');
   const botonConsultar = document.querySelector('#piloto-actualizar-plan');
   const panelPod = document.querySelector('#piloto-pod');
   const selectorJornada = document.querySelector('#piloto-jornada');
@@ -3597,7 +3669,8 @@ const baseReporteGpro=[
     registros.forEach((registro, indice) => {
       const partida = partidas.get(registro.item_plan);
       const linea = 8+indice;
-      const nombre = registro.item_plan === null ? 'Fuera del POD · '+registro.descripcion : registro.descripcion;
+      const nombre = metas.has(registro.item_plan) ? registro.descripcion :
+        (partida?'Recuperación Plan Semanal · ':'Fuera del POD · ')+registro.descripcion;
       if (indice>=96) masActividades.push([registro.item_plan,partida?.[1],nombre,Number(registro.cantidad),
         metas.get(registro.item_plan),registro.hh==null?null:Number(registro.hh),registro.observacion_ito]);
       else Object.assign(actividades, {
@@ -3718,6 +3791,7 @@ const baseReporteGpro=[
   const cerrarItoPiloto = document.querySelector('#piloto-cerrar-ito');
   const tituloReporte = document.querySelector('#piloto-titulo-reporte');
   const progresoReporte = document.querySelector('#piloto-progreso-reporte');
+  const observacionesReporte = document.querySelector('#piloto-observaciones-reporte');
   const indiceJornadas = document.querySelector('#piloto-indice-jornadas');
   const planificacionJornadas = document.querySelector('#piloto-planificacion-jornadas');
   const progresoJornadas = document.querySelector('#piloto-progreso-jornadas');
@@ -3872,6 +3946,17 @@ const baseReporteGpro=[
     }
   }
 
+  observacionesReporte.addEventListener('click',evento=>{
+    const boton = evento.target.closest('[data-ir-observacion]');
+    if (!boton) return;
+    mostrarVistaReporte(boton.dataset.irObservacion);
+    vistasReporte.querySelector('[aria-pressed="true"]').focus();
+  });
+
+  function mensajeObservacion(texto,destacada) {
+    return texto?'<p class="'+(destacada?'detalle-observacion':'nota-observacion')+'"><strong>Observación de ITO</strong> '+esc(texto)+'</p>':'';
+  }
+
   function enfocarRevisionPendiente(vista) {
     const pendiente = vista.pendienteRevision;
     const enCnc = !cncDiarias.hidden;
@@ -3913,7 +3998,7 @@ const baseReporteGpro=[
       (causas.length
       ? tablaCncPiloto(causas) : '<p>'+(bloque?'Sin registros · declaración enviada.':'Sin CNC registradas en esta jornada.')+'</p>')+
       (bloque?
-        (bloque.observacion?'<p>Observación de ITO · '+esc(bloque.observacion)+'</p>':'')+
+        mensajeObservacion(bloque.observacion,estado==='observado')+
         (bloque.respuesta?'<p>Respuesta · '+esc(bloque.respuesta)+'</p>':'')+
         '<div class="row">'+acciones.map(([accion,texto])=>'<button type="button"'+(accion==='validar_cnc'?' class="primary"':'')+
           ' data-cnc-accion="'+accion+'">'+texto+'</button>').join('')+'</div>'+
@@ -3986,7 +4071,7 @@ const baseReporteGpro=[
   const botonDescargarEjecucion = document.querySelector('#piloto-descargar-ejecucion');
 
   function filasEjecucionSemanal(vista, registros, pods=null) {
-    const encabezados = ['Contrato','Lunes de la semana','Fecha de jornada','Jornada','Origen','Ítem del POD',
+    const encabezados = ['Contrato','Lunes de la semana','Fecha de jornada','Jornada','Origen','Ítem',
       'Actividad','Unidad','Q Plan Semanal','Q ejecutada','HH Plan Semanal','HH de ejecución','Estado',
       'Observación ITO','CNC primaria','CNC secundaria','Responsable CNC','Detalle CNC','Medida de contención','HH afectadas',
       'Q objetivo POD','HH objetivo POD'];
@@ -4018,7 +4103,7 @@ const baseReporteGpro=[
       const qPod = objetivo ? qDia(objetivo,jornada) : null;
       const hhPod = objetivo ? hhDesdeRendimiento(qPod,tasaPartida(objetivo,jornada)) : null;
       const fecha = fechaDesde(vista.lunes, jornada);
-      return [vista.codigo, vista.lunes, fecha, diasSemana[jornada], item === null ? 'Fuera del POD' : 'POD',
+      return [vista.codigo, vista.lunes, fecha, diasSemana[jornada], objetivo ? 'POD' : partida ? 'Fuera del POD · Plan Semanal' : 'Fuera del Plan Semanal',
         item ?? '', registro.descripcion, registro.unidad, partida ? qDia(partida, jornada) : '',
         registro.cantidad == null ? '' : Number(registro.cantidad),
         partida ? hhDia(partida, jornada) : '', registro.hh == null ? '' : Number(registro.hh),
@@ -4193,6 +4278,7 @@ const baseReporteGpro=[
       const pendientes = vista.pendientesOficina?.[jornada];
       const seguimiento = pendientes ? '<small class="pendientes-oficina">'+pendientes.reportar+' por reportar<br>'+
         pendientes.enviar+' por enviar<br>'+pendientes.corregir+' por corregir</small>' : '';
+      const observadas = (estado?.observados??0)+Number(estado?.cnc?.estado==='observado')+Number(estado?.vacia?.estado==='observado');
       boton.textContent = (estado?.cerrado || vista.perfil === 'ITO' ? 'Ver reporte diario' :
         estado?.podListo === false ? (vista.perfil === 'Oficina Técnica'?'Realizar POD':'Ver POD') :
         vista.perfil === 'Oficina Técnica'?'Completar reporte diario':'Ver reporte diario')+' · '+nombre;
@@ -4211,6 +4297,7 @@ const baseReporteGpro=[
         (vista.destino === 'reportes' && estado ? '<small>'+estado.porRevisar+' por revisar · '+estado.validados+' validadas · '+
           estado.observados+' observadas</small>' : '')+
         (estado?.cnc?'<small>CNC · '+esc(estadosIto[estado.cnc.estado])+'</small>':'')+
+        (observadas?'<span class="aviso-observacion">'+observadas+(observadas===1?' observación de ITO':' observaciones de ITO')+'</span>':'')+
         (estado?.formal?'<span class="status '+(estado.formal.observado?'obs':'valid')+'">'+
           textoCierreIto(estado.formal)+'</span>':'')+
         (alertas ? '<span class="status restr-abierta">'+alertas+(alertas===1?' alerta de terreno':' alertas de terreno')+'</span>' : '')+
@@ -5430,6 +5517,10 @@ const baseReporteGpro=[
       const fila = partida ?? adicionales.get(clave);
       if (registro.estado_ito==='validado') fila.editables.push(registro.id);
       const estado = registro.estado_ito;
+      if (partida && estado!=='borrador') {
+        const pod = pods?.find(p=>p.jornada===d&&p.cerrado_en);
+        if (pod ? !(Number(pod.metas?.[registro.item_plan])>0) : qDia(partida.partida,d)===0) fila.real[d].recuperada = true;
+      }
       const estados = fila.real[d].estados;
       estados[estado] = (estados[estado] ?? 0)+1;
       if (estado==='borrador') continue;
@@ -5474,7 +5565,7 @@ const baseReporteGpro=[
     const dias = filtro === 'todos' ? [0,1,2,3] : filtro === 'total' ? [] : [Number(filtro)];
     const grupos = [-1,...dias];
     const clase = (d,real=false,inicio=false) => ' class="'+[
-      d === -1?'consolidado-semanal':'',real?'consolidado-real':'',inicio?'consolidado-inicio':'',
+      d === -1?'consolidado-semanal':'',real?'consolidado-real':'consolidado-prog',inicio?'consolidado-inicio':'',
     ].filter(Boolean).join(' ')+'"';
     const valor = n => n == null ? '—' : num(n);
     const sumarReal = (real,k) => real.some(r=>r[k] !== null) ? real.reduce((s,r)=>s+(r[k] ?? 0),0) : null;
@@ -5494,9 +5585,15 @@ const baseReporteGpro=[
           const semanal = d === -1;
           const qProg = semanal?sumaDias(partida,qDia):qDia(partida,d);
           const hhProg = semanal?sumaDias(partida,(p,i)=>Number(hhDia(p,i))):hhDia(partida,d);
+          const qReal = semanal?(q===null?null:q+deltaQ):real[d].q;
+          const recuperada = semanal?real.some(r=>r.recuperada):real[d].recuperada;
+          const falta = semanal&&qReal!==null&&diferenciaQ(qReal,qProg)<0 ? redondear2(qProg-qReal) : 0;
           return '<td'+clase(d,false,true)+'>'+valor(partida.length>4?qProg:null)+'</td><td'+clase(d)+'>'+
             valor(partida.length>4?hhProg:null)+'</td><td'+clase(d,true)+'>'+
-            valor(semanal?q===null?null:q+deltaQ:real[d].q)+(semanal&&ajustes?'<small>Ajuste V3</small>':'')+
+            valor(qReal)+(semanal&&ajustes?'<small>Ajuste V3</small>':'')+
+            (semanal&&qProg>0&&qReal===null?'<small class="matriz-faltante">Sin envío</small>':
+              falta>0?'<small class="matriz-faltante">Faltan '+num(falta)+' '+esc(unidad)+'</small>':'')+
+            (recuperada?'<small class="extra-plan">Recuperación</small>':'')+
             (semanal?'':etiquetasEstadoMatriz([real[d]]))+
             (semanal&&editables.length&&matrizConsolidado.dataset.editarV3==='true'?
               '<button type="button" class="link" data-ajustar-v3="'+i+'" aria-label="Ajustar V3 · '+esc(descripcion)+'">Ajustar V3</button>':'')+
@@ -5525,8 +5622,8 @@ const baseReporteGpro=[
       ['Ítem','Área','Actividad','Unidad'].map(c=>'<th scope="col" rowspan="3" class="col-identidad">'+c+'</th>').join('')+
       grupos.map(d=>'<th scope="colgroup" colspan="4"'+clase(d,false,true)+'>'+
       (d === -1?'Total semanal':diasSemana[d]+'<small>'+fechaCorta(fechaDesde(semanaConsolidado.value,d)).slice(0,5)+'</small>')+
-      '</th>').join('')+'</tr><tr>'+grupos.map(d=>'<th colspan="2"'+clase(d,false,true)+'>PROG</th><th colspan="2"'+
-        clase(d,true)+'>REAL</th>').join('')+'</tr><tr>'+grupos.map(d=>'<th scope="col"'+clase(d,false,true)+'>Q</th><th scope="col"'+
+      '</th>').join('')+'</tr><tr>'+grupos.map(d=>'<th colspan="2"'+clase(d,false,true)+'>Programado</th><th colspan="2"'+
+        clase(d,true)+'>Real</th>').join('')+'</tr><tr>'+grupos.map(d=>'<th scope="col"'+clase(d,false,true)+'>Q</th><th scope="col"'+
         clase(d)+'>HH</th><th scope="col"'+clase(d,true)+'>Q</th><th scope="col"'+clase(d,true)+'>HH</th>').join('')+
       '</tr></thead><tbody>'+filas+'</tbody>'+pie+'</table>' :
       '<p>'+(estadoFiltro?'No hay actividades con este estado en el período seleccionado.':'Sin partidas para mostrar.')+'</p>';
@@ -5890,15 +5987,12 @@ const baseReporteGpro=[
       apeDiarioPiloto(registro,planApe.find(p=>p[0]===registro.item&&p[3]===registro.unidad)),
     ])}));
     const resumen = variacionSemanalPiloto(lunes,plan,resultado,pods);
-    const ayuda = resultado.cerrada
-      ? 'Las fracciones en los totales indican cuántos registros tienen cantidad disponible.'+
-        (resultado.plan_cierre?' El rendimiento del cierre proviene de la foto guardada.':
-          ' Sin foto del Plan al cierre. El APE diario requiere un rendimiento guardado.')
-      : 'La comparación semanal es provisional. Usa V3 donde hay ajustes y V2 en las demás filas.';
+    const ayuda = resultado.cerrada ? (resultado.plan_cierre?'El rendimiento del cierre proviene de la foto guardada.':
+      'Sin foto del Plan al cierre. El APE diario requiere un rendimiento guardado.') : '';
     const columnas = ['Jornada','Ítem','Actividad','Unidad','V1 · Primer envío','V2 · Validada ITO',
       'Variación V2 − V1','V3 · Final','Motivo del ajuste','APE diario'];
-    return '<h4>Variación semanal por partida</h4>'+(resumen.length?tablaVariacionSemanal(resumen,false):'<p>Sin partidas para comparar.</p>')+
-      '<p>'+ayuda+'</p><h4>Evolución de la Q real</h4>'+diasSemana.map((dia,d)=>{
+    return panelVariacionQ(resumen,Boolean(resultado.cerrada))+
+      (ayuda?'<p>'+ayuda+'</p>':'')+'<h4>Evolución de la Q real</h4>'+diasSemana.map((dia,d)=>{
         const f = filas.filter(r=>r.dia===d);
         return f.length?'<details'+(filas[0].dia===d?' open':'')+'><summary>'+dia+'</summary>'+
           tabla(columnas,f.map(r=>r.html).join(''))+'</details>':'';
@@ -6090,6 +6184,17 @@ const baseReporteGpro=[
         '<p>Actualiza el consolidado para volver a comprobar si la semana puede cerrar.</p>':'')+'</section>';
   }
 
+  function cifrasCierre(items) {
+    return '<dl class="cierre-cifras">'+items.map(([etiqueta,valor,tono])=>'<div class="cierre-cifra'+
+      (tono?' cierre-'+tono:'')+'"><dt>'+esc(etiqueta)+'</dt><dd>'+esc(valor)+'</dd></div>').join('')+'</dl>';
+  }
+
+  function barraCierre(etiqueta,valor,texto) {
+    const ancho = Number.isFinite(valor)?Math.max(0,Math.min(100,valor*100)):null;
+    return '<div class="cierre-barra"><span>'+esc(etiqueta)+'</span><strong>'+esc(texto)+'</strong>'+
+      (ancho===null?'':'<i aria-hidden="true"><span style="width:'+ancho+'%"></span></i>')+'</div>';
+  }
+
   async function cargarResumenReunion(vista,semana,vigente) {
     const lunes = semana.lunes, siguiente = fechaDesde(lunes,7);
     const contrato = '&contrato_codigo=eq.'+encodeURIComponent(vista.codigo);
@@ -6153,12 +6258,20 @@ const baseReporteGpro=[
         const q = sumaDias(p,qDia);
         return q>0&&!metaAlcanzada(qEnviadaPorDia.reduce((s,d)=>s+(d.get(p[0])??0),0),q);
       });
-      const tablaDia = tabla(['Jornada','Reporte EECC','PPC POD','Previstas enviadas','Validación ITO','Entrega D+1'],dias.map((dia,d)=>{
+      const tarjetasDia = '<div class="cierre-jornadas">'+dias.map((dia,d)=>{
         const tendencia = metricas.tendencias.find(r=>r.jornada===fechaDesde(lunes,d));
-        return fila([diasSemana[d],textoCierreJornada(dia),dia.podListo?razon(dia.metasCumplidas,dia.programadas):'—',
-          razon(dia.programadasEnviadas,dia.programadas),razon(dia.validados,dia.enviados),
-          estadosEntrega[tendencia?.estadoEntrega]??'—']);
-      }).join(''));
+        const ratio = (a,b)=>b>0?a/b:null;
+        const ppcDia = dia.podListo?ratio(dia.metasCumplidas,dia.programadas):null;
+        const previstas = ratio(dia.programadasEnviadas,dia.programadas);
+        const ito = ratio(dia.validados,dia.enviados);
+        const entrega = tendencia?.estadoEntrega;
+        return '<article class="cierre-dia"><h5>'+diasSemana[d]+' <time datetime="'+fechaDesde(lunes,d)+'">'+
+          fechaCorta(fechaDesde(lunes,d)).slice(0,5)+'</time></h5><span class="cierre-entrega" data-entrega="'+
+          esc(entrega)+'">'+esc(estadosEntrega[entrega]??'D+1 sin dato')+'</span><p>'+textoCierreJornada(dia)+'</p>'+
+          barraCierre('PPC POD',ppcDia,porcentaje(ppcDia))+
+          barraCierre('Previstas enviadas',previstas,porcentaje(previstas))+
+          barraCierre('Validación ITO',ito,porcentaje(ito))+'</article>';
+      }).join('')+'</div>';
       const peor = dias.map((d,i)=>({d,i})).filter(({d})=>d.podListo&&d.programadas)
         .sort((a,b)=>a.d.metasCumplidas/a.d.programadas-b.d.metasCumplidas/b.d.programadas)[0];
       const causas = registros?.filter(r=>r.estado_ito!=='borrador').flatMap(r=>causasDeActividad(r.cnc)
@@ -6190,15 +6303,20 @@ const baseReporteGpro=[
       const requisitos = semana.cerrado_en||!registros?[]:requisitosJornadaCierre(partidas,registros,pods,cnc,cierres,vacias,semana);
       const detalleParcial = !registros || !pods || !cnc || !vacias;
       const evaluablesD1 = semana.d1_a_tiempo + semana.d1_tarde + semana.d1_vencidas;
-      resumenReunion.innerHTML = datosCierre+
-        (semana.cerrado_en?'':detalleRequisitosCierre(requisitos,detalleParcial,semana))+
-        '<section class="card"><h4>1. ¿Cómo nos fue?</h4><div class="row">'+
-        [['Avance programado',porcentaje(programado)],['Avance real',porcentaje(real)],['PPC semanal',porcentaje(ppc)],
-          ['Reportabilidad',porcentaje(reportabilidad)],['Validación ITO',porcentaje(confianza)],
-          ['D+1 a tiempo',evaluablesD1>0?semana.d1_a_tiempo+' de '+evaluablesD1:'—'],['MAPE',porcentaje(variacion?.mape)]]
-          .map(([k,v])=>'<span class="status prep">'+k+' · '+v+'</span>').join('')+'</div>'+tablaDia+
-        (peor?'<p>Menor PPC del POD · '+diasSemana[peor.i]+' · '+razon(peor.d.metasCumplidas,peor.d.programadas)+'</p>':'')+
-        '<p>Partidas bajo meta semanal · '+(registros===null?'—':bajoMeta.length)+'</p>'+
+      const brechaAvance = Number.isFinite(programado)&&Number.isFinite(real)?(real-programado)*100:null;
+      const deltaAvance = brechaAvance===null?'—':new Intl.NumberFormat('es-CL',{maximumFractionDigits:1,signDisplay:'exceptZero'}).format(brechaAvance)+' pp';
+      const estadoSemana = semana.cerrado_en?'Semana cerrada':semana.puede_cerrar?'Lista para cerrar':'Con cierre pendiente';
+      resumenReunion.innerHTML = '<div class="cierre-portada"><div><span class="cierre-estado">'+estadoSemana+
+        '</span><h4>'+esc(rangoSemana(lunes))+'</h4></div>'+datosCierre+'</div>'+
+        '<section class="card cierre-seccion"><h4>Avance y cumplimiento</h4><div class="cierre-avance">'+
+        barraCierre('Avance programado',programado,porcentaje(programado))+
+        barraCierre('Avance real',real,porcentaje(real))+
+        '<span class="cierre-delta"><strong>'+deltaAvance+'</strong><small>Real menos programado</small></span></div>'+
+        cifrasCierre([['PPC semanal',porcentaje(ppc)],['Reportabilidad',porcentaje(reportabilidad)],
+          ['Validación ITO',porcentaje(confianza)],['D+1 a tiempo',evaluablesD1>0?semana.d1_a_tiempo+' de '+evaluablesD1:'—'],
+          ['MAPE',porcentaje(variacion?.mape)],['Partidas bajo meta',registros===null?'—':bajoMeta.length,bajoMeta.length?'atencion':'']])+
+        '<h5>Desempeño por jornada</h5>'+tarjetasDia+
+        (peor?'<p><strong>Menor PPC del POD</strong> · '+diasSemana[peor.i]+' · '+razon(peor.d.metasCumplidas,peor.d.programadas)+'</p>':'')+
         (registros&&bajoMeta.length?'<details><summary>Ver partidas bajo meta</summary><ul>'+bajoMeta.map(p=>'<li>'+esc(p[0]+' · '+p[2])+'</li>').join('')+'</ul></details>':'')+
         '<details><summary>Tiempos medios verificables</summary>'+tabla(['Tramo','Promedio y muestra'],[
           ['08:00 → primer envío',promedio(metricas.datos,'base','primerEnvio')],
@@ -6206,16 +6324,22 @@ const baseReporteGpro=[
           ['08:00 → validación',promedio(metricas.datos,'base','validacion')],
           ['08:00 → envío completo',promedio(metricas.reportes,'base','envioCompleto')],
         ].map(fila).join(''))+'</details></section>'+
-        '<section class="card"><h4>2. ¿Por qué pasó?</h4>'+(registros===null?'<p>Datos de ejecución y CNC no disponibles.</p>':'<p>'+causas.length+' CNC · '+
-        num(agrupadas.reduce((s,g)=>s+g.hh,0))+' HH atribuidas · '+causas.filter(c=>c.hh_afectadas==null).length+' sin HH · '+(brechasSinCnc??'—')+
-        ' brechas enviadas sin CNC.</p>')+(impacto?'<p>Mayor impacto · '+esc(impacto.primaria)+' · '+num(impacto.hh)+' HH</p>':'')+
+        (semana.cerrado_en?'':detalleRequisitosCierre(requisitos,detalleParcial,semana))+
+        '<section class="card cierre-seccion"><h4>Causas y alertas</h4>'+
+        (registros===null?'<p>Datos de ejecución y CNC no disponibles.</p>':cifrasCierre([
+          ['CNC registradas',causas.length],['HH atribuidas',num(agrupadas.reduce((s,g)=>s+g.hh,0))],
+          ['CNC sin HH',causas.filter(c=>c.hh_afectadas==null).length],
+          ['Brechas sin CNC',brechasSinCnc??'—',brechasSinCnc?'atencion':'']]))+
+        (impacto?'<p class="cierre-hallazgo"><strong>Mayor impacto</strong> · '+esc(impacto.primaria)+' · '+num(impacto.hh)+' HH</p>':'')+
         (causas.length?'<details><summary>Ver causas por jornada</summary>'+tabla(['Jornada','Partida','Causa','Responsable','HH'],
           causas.map(c=>fila([diasSemana[c.jornada],esc(c.item??c.actividad),esc(c.causa),esc(c.responsable),
             c.hh_afectadas==null?'—':num(c.hh_afectadas)])).join(''))+'</details>':'')+
         '<h5>Alertas de terreno</h5>'+listaAlertas+'</section>'+
-        '<section class="card"><h4>3. ¿Cómo aseguramos la próxima semana?</h4><p>'+
-        (proximo?'Plan siguiente · '+esc(rangoSemana(siguiente)):'El Plan Semanal siguiente todavía no está cargado.')+'</p><p>'+
-        abiertas.length+' abiertas · '+abiertas.filter(r=>r.plazo<hoy).length+' vencidas · '+cerradas.length+' cerradas en la semana.</p>'+
+        '<section class="card cierre-seccion"><h4>Preparación de la próxima semana</h4><p>'+
+        (proximo?'Plan siguiente · '+esc(rangoSemana(siguiente)):'El Plan Semanal siguiente todavía no está cargado.')+'</p>'+
+        cifrasCierre([['Restricciones abiertas',abiertas.length],
+          ['Vencidas',abiertas.filter(r=>r.plazo<hoy).length,abiertas.some(r=>r.plazo<hoy)?'atencion':''],
+          ['Cerradas esta semana',cerradas.length]])+
         (filasRestricciones.length?tabla(['Restricción','Acción','Responsable','Plazo','Estado','Partidas en riesgo'],filasRestricciones.join('')):'')+
         (cerradas.length?'<details><summary>Restricciones cerradas en la semana</summary><ul>'+
           cerradas.map(r=>'<li>'+esc(r.detalle)+' · '+hora(r.cerrado_en)+'</li>').join('')+'</ul></details>':'')+'</section>';
@@ -6884,18 +7008,13 @@ const baseReporteGpro=[
     return opcion;
   }
 
-  function hhDesdeRendimiento(cantidad, tasa) {
-    if (!Number.isFinite(cantidad) || cantidad < 0) return null;
-    if (cantidad===0) return 0;
-    if (!Number.isFinite(tasa) || tasa < 0) return null;
-    const hh = redondear2(cantidad * tasa);
-    return hh <= 99999999999999.99 ? hh : null;
-  }
-
   function tasaPartida(partida, jornada) {
     const tasa = partida[12];
     const base = partida.qPlanOriginal ?? qDia(partida,jornada);
-    return tiene(tasa) ? Number(tasa) : Number(hhDia(partida,jornada)) / base;
+    if (tiene(tasa)) return Number(tasa);
+    if (base>0) return Number(hhDia(partida,jornada)) / base;
+    return partida.qPlanOriginal===undefined && sumaDias(partida,qDia)>0
+      ? sumaDias(partida,(p,d)=>Number(hhDia(p,d))) / sumaDias(partida,qDia) : NaN;
   }
 
   function celdaRevision(vista, registro, inline = false) {
@@ -6907,7 +7026,7 @@ const baseReporteGpro=[
     if (!inline && vista.perfil === 'Oficina Técnica' && registro.estado_ito === 'observado') acciones = boton('corregir', 'Corregir y reenviar');
     if (vista.perfil === 'ITO' && registro.estado_ito === 'enviado' &&
       (!vista.jornada?.inicios || registro.inicioRevision)) acciones = boton('validar', 'Validar') + boton('observar', 'Observar');
-    const observacion = registro.observacion_ito ? '<p><strong>Observación ITO</strong> · '+esc(registro.observacion_ito)+'</p>' : '';
+    const observacion = mensajeObservacion(registro.observacion_ito,registro.estado_ito==='observado');
     const historial = registro.estado_ito === 'borrador' ? '' :
       '<details data-historial-revision="'+esc(registro.id)+'"><summary>Historial de revisión</summary>'+
       '<div data-eventos-revision aria-live="polite"></div></details>';
@@ -7065,6 +7184,8 @@ const baseReporteGpro=[
     const cambiaEjecucion = editar || accion === 'corregir';
     const correccionCerrada = accion==='corregir' && Boolean(vista.jornada.cerrado);
     const partida = vista.jornada.partidaDiaria.find(f => f[0] === registro.item_plan);
+    const vinculada = vista.partidas.find(p=>p[0]===registro.item_plan);
+    const tasaPlan = vinculada ? tasaPartida(vinculada,vista.jornada.jornada) : NaN;
     const meta = partida ? qDia(partida, vista.jornada.jornada) : null;
     const causasPrevias = accion==='corregir' && meta!==null && registro.cantidad<meta ? causasDeActividad(registro.cnc) : [];
     const requiereCnc = cantidad => meta !== null && cantidad < meta && !causasPrevias.length;
@@ -7092,7 +7213,7 @@ const baseReporteGpro=[
       (causasPrevias.length?'<p class="reparto-cnc" data-impacto-correccion role="status"></p>':'')+
       (ejecucion ? (correccionCerrada?'':'<p>Q ejecutada · '+num(ejecucion.cantidad)+' '+esc(registro.unidad)+'</p>') : cambiaEjecucion ? [
         ['cantidad',editar ? 'Cantidad ejecutada' : 'Cantidad corregida'],['hh','HH de ejecución'],
-      ].map(([campo,etiqueta]) => '<label>'+etiqueta+'<input name="'+campo+'" type="number" min="0" max="99999999999999.99" step="0.01" required value="'+esc(registro[campo])+'"></label>').join('') : '')+
+      ].map(([campo,etiqueta]) => '<label>'+etiqueta+'<input name="'+campo+'" type="number" min="0" max="99999999999999.99" step="0.01" '+(campo==='hh'&&vinculada?'readonly':'required')+' value="'+esc(registro[campo])+'"></label>').join('') : '')+
       (correccionCerrada?'<label>Comentario (opcional)<textarea name="comentario" maxlength="500" rows="2"></textarea></label><p data-error-correccion role="status"></p>':'')+
       '<fieldset data-causa-remota><legend>Causas de no cumplimiento</legend>'+cuerpoEditorCnc+'</fieldset>'+
       '<div class="row"><button type="button" data-cancelar>Cancelar</button><button type="submit" class="primary">'+(editar ? 'Guardar borrador' : accion === 'observar' ? 'Enviar observación' : 'Enviar a ITO')+'</button></div></form>';
@@ -7100,17 +7221,21 @@ const baseReporteGpro=[
     const cnc = dialogo.querySelector('[data-causa-remota]');
     const campos = formulario.elements;
     const cantidad = () => ejecucion?.cantidad ?? (cambiaEjecucion ? campos.cantidad.valueAsNumber : Number(registro.cantidad));
-    const horas = () => ejecucion ? ejecucion.hh : (correccionCerrada && !partida && Number(registro.cantidad)>0
-      ? hhDesdeRendimiento(cantidad(),Number(registro.hh)/Number(registro.cantidad)) : campos.hh.valueAsNumber);
-    if (correccionCerrada && !ejecucion && Number(registro.cantidad)>0 && !partida) campos.hh.readOnly = true;
+    const horas = () => ejecucion ? ejecucion.hh : vinculada ? hhDesdeRendimiento(cantidad(),tasaPlan) :
+      correccionCerrada && Number(registro.cantidad)>0 ?
+        hhDesdeRendimiento(cantidad(),Number(registro.hh)/Number(registro.cantidad)) : campos.hh.valueAsNumber;
+    if (correccionCerrada && !ejecucion && Number(registro.cantidad)>0 && !vinculada) campos.hh.readOnly = true;
     const brecha = () => partida && Number.isFinite(cantidad()) ?
       hhDesdeRendimiento(Math.max(0,meta-cantidad()),tasaPartida(partida,vista.jornada.jornada)) : null;
     const editor = editorCausasPiloto(cnc,[],brecha);
     const impacto = dialogo.querySelector('[data-impacto-correccion]');
     function mostrarCnc() {
+      if (campos.hh?.readOnly) {
+        const hh = horas();
+        campos.hh.value = hh==null?'':String(hh);
+      }
       if (correccionCerrada) {
         const q = cantidad(), hh = horas();
-        if (campos.hh?.readOnly) campos.hh.value = hh==null?'':String(hh);
         dialogo.querySelector('[data-comparacion-correccion]').textContent =
           'Q enviada: '+num(registro.cantidad)+' → '+(Number.isFinite(q)?num(q):'—')+' '+registro.unidad+
           ' · HH: '+(registro.hh==null?'—':num(registro.hh))+' → '+(hh!=null&&Number.isFinite(hh)?num(hh):'—');
@@ -7141,7 +7266,7 @@ const baseReporteGpro=[
         p_hh:horas()});
       if (correccionCerrada) {
         if (diferenciaQ(valores.p_cantidad,registro.cantidad)===0 ||
-          (!Number.isFinite(valores.p_hh) && !(partida && valores.p_hh===null))) {
+          (!Number.isFinite(valores.p_hh) && !(vinculada && !Number.isFinite(tasaPlan) && valores.p_hh===null))) {
           dialogo.querySelector('[data-error-correccion]').textContent = 'Ingresa una cantidad distinta y HH válidas.';
           return;
         }
@@ -7452,6 +7577,7 @@ const baseReporteGpro=[
       vista.perfil==='ITO'&&b.estado==='enviado'&&b.iniciado_en?[['validar','Validar declaración'],['observar','Observar declaración']]:[];
     panelVacias.innerHTML = '<div class="card"><strong>Actividades · Sin registros</strong>'+
       (b?'<p>'+esc(estadosIto[b.estado])+' · Ronda '+b.ronda+' · '+hora(b.enviado_en)+'</p>'+
+        mensajeObservacion(b.observacion,b.estado==='observado')+
         '<details><summary>Historial de la declaración</summary><ul>'+consulta.rondasVacias.map(r=>'<li>Ronda '+r.ronda+
           ' · '+hora(r.enviado_en)+' · '+esc(estadosIto[r.estado])+(r.observacion?' · Observación: '+esc(r.observacion):'')+
           (r.respuesta?' · Respuesta: '+esc(r.respuesta):'')+'</li>').join('')+'</ul></details>':
@@ -7500,6 +7626,12 @@ const baseReporteGpro=[
     panelVacias.replaceChildren();
     const partidaDiaria = metasPodPiloto(vista.partidas,jornada);
     const consulta = {jornada, partidaDiaria};
+    reporteAbierto.dataset.perfil = vista.perfil;
+    observacionesReporte.hidden = true;
+    observacionesReporte.replaceChildren();
+    for (const boton of vistasReporte.querySelectorAll('button')) {
+      boton.querySelector('[data-observaciones-tab]')?.remove();
+    }
     vista.jornada = consulta;
     const vigente = () => vistaPlanRemoto === vista && vista.jornada === consulta;
     consulta.cargaAlertas = cargarAlertasTerreno(vista,consulta);
@@ -7581,7 +7713,8 @@ const baseReporteGpro=[
       if (lista.length) registrosDiarios.innerHTML = '<h3>Actividades fuera del POD</h3>'+
         tabla(['Ítem','Actividad','Unidad','Q Plan','Q ejecutada','Estado y acciones'],lista.map(registro=>{
           const partida = vista.partidas.find(p=>p[0]===registro.item_plan);
-          return fila([esc(registro.item_plan??'—'),esc(registro.descripcion),esc(registro.unidad),
+          return fila([esc(registro.item_plan??'—'),esc(registro.descripcion)+
+            (partida?'<small class="extra-plan">Recuperación · Plan Semanal</small>':''),esc(registro.unidad),
             partida?num(qDia(partida,jornada)):'—',num(registro.cantidad),celdaRevision(vista,registro)]);
         }).join(''));
       formularioEjecucion.reset();
@@ -7595,6 +7728,18 @@ const baseReporteGpro=[
       const actividadesCompletas = todasEnviadas && !registros.some(r=>r.estado_ito==='enviado') && consulta.vacia?.estado!=='enviado';
       const observadas = registros.filter(r=>r.estado_ito==='observado').length + Number(consulta.vacia?.estado==='observado');
       const cncObservada = consulta.cnc?.estado==='observado';
+      if (observadas || cncObservada) {
+        const total = observadas+Number(cncObservada);
+        observacionesReporte.innerHTML = '<strong>'+total+(total===1?' observación pendiente de ITO':' observaciones pendientes de ITO')+'</strong>'+
+          '<div class="row">'+(observadas?'<button type="button" data-ir-observacion="actividades">Ver Actividades ('+observadas+')</button>':'')+
+          (cncObservada?'<button type="button" data-ir-observacion="cnc">Ver CNC</button>':'')+'</div>';
+        observacionesReporte.hidden = false;
+        for (const boton of vistasReporte.querySelectorAll('button')) {
+          const cantidad = boton.dataset.vistaReporte==='cnc'?Number(cncObservada):observadas;
+          if (cantidad) boton.insertAdjacentHTML('beforeend','<small data-observaciones-tab>'+cantidad+
+            (cantidad===1?' observación':' observaciones')+'</small>');
+        }
+      }
       const estadoCnc = consulta.cnc ? estadosIto[consulta.cnc.estado] : 'Por enviar';
       const orientacion = observadas||cncObservada ? 'Revisa las observaciones de ITO.' :
         consulta.cerrado ? 'Consulta los itemizados del reporte.' :
@@ -7855,10 +8000,39 @@ const baseReporteGpro=[
     abrirRevision(vista,registro??{item_plan:partida[0],descripcion:partida[2],unidad:partida[3]},'enviar',{cantidad,hh},confirmarEnvio);
   });
 
+  function sincronizarExtra(vista) {
+    const campos = formularioEjecucion.elements;
+    const partida = vista.partidas.find(p=>p[0]===campos.item_plan.value);
+    const anterior = campos.descripcion.readOnly;
+    for (const campo of [campos.descripcion,campos.unidad,campos.rendimiento]) campo.readOnly = Boolean(partida);
+    campos.rendimiento.required = !partida;
+    formularioEjecucion.querySelector('[data-ayuda-extra]').hidden = !partida;
+    if (partida) {
+      const tasa = tasaPartida(partida,vista.jornada.jornada);
+      campos.descripcion.value = partida[2];
+      campos.unidad.value = partida[3];
+      campos.rendimiento.value = Number.isFinite(tasa)?String(tasa):'';
+    } else if (anterior) {
+      campos.descripcion.value = campos.unidad.value = campos.rendimiento.value = '';
+    }
+    return partida;
+  }
+
+  formularioEjecucion.elements.item_plan.addEventListener('change',()=>{
+    if(vistaPlanRemoto?.jornada) sincronizarExtra(vistaPlanRemoto);
+  });
   reportarExtra.addEventListener('click', () => {
-    if (reportarExtra.hidden || vistaPlanRemoto?.ocupado) return;
+    const vista = vistaPlanRemoto;
+    if (reportarExtra.hidden || !vista?.jornada || vista.ocupado) return;
+    const {partidaDiaria,registros} = vista.jornada;
+    const ocupadas = new Set([...partidaDiaria.map(p=>p[0]),...registros.map(r=>r.item_plan)]);
+    const selector = formularioEjecucion.elements.item_plan;
+    selector.replaceChildren(opcionEjecucion('','Actividad fuera del Plan Semanal'),
+      ...vista.partidas.filter(p=>!ocupadas.has(p[0])&&sumaDias(p,qDia)>0)
+        .map(p=>opcionEjecucion(p[0],p[0]+' · '+p[2])));
+    sincronizarExtra(vista);
     formularioEjecucion.hidden = false;
-    formularioEjecucion.elements.descripcion.focus();
+    selector.focus();
   });
   document.querySelector('#piloto-cancelar-extra').addEventListener('click',()=>{
     if (vistaPlanRemoto?.ocupado) return;
@@ -7919,6 +8093,8 @@ const baseReporteGpro=[
         await refrescarEjecucion(vista,'El registro cambió. Revisa la fila antes de continuar.');
       } else if (error.codigo === 'PGRST202') {
         estadoEjecucion.textContent = 'Aplica GPRO_D1_Supabase_37.sql para habilitar el envío de actividades.';
+      } else if (error.codigo==='42501' && datos.p_item!==null && !consulta.partidaDiaria.some(p=>p[0]===datos.p_item)) {
+        estadoEjecucion.textContent = 'Comprueba el acceso del contrato y que se haya aplicado la migración 43 en Supabase.';
       } else if (['22023','42501'].includes(error.codigo)) {
         estadoEjecucion.textContent = error.message;
       } else {
@@ -7945,16 +8121,19 @@ const baseReporteGpro=[
     const vista = vistaPlanRemoto;
     if (vista?.perfil !== 'Oficina Técnica' || !vista.jornada || vista.jornada.cerrado || vista.ocupado || formularioEjecucion.hidden) return;
     const campos = formularioEjecucion.elements;
-    const descripcion = campos.descripcion.value.trim();
-    const unidad = campos.unidad.value.trim();
+    const partida = sincronizarExtra(vista);
+    const descripcion = partida?.[2] ?? campos.descripcion.value.trim();
+    const unidad = partida?.[3] ?? campos.unidad.value.trim();
     const cantidad = campos.cantidad.valueAsNumber;
-    const hh = hhDesdeRendimiento(cantidad,campos.rendimiento.valueAsNumber);
-    if (!descripcion || !unidad || hh == null) {
-      estadoEjecucion.textContent = 'Completa la actividad, su unidad, cantidad y rendimiento.';
+    const tasa = partida ? tasaPartida(partida,vista.jornada.jornada) : campos.rendimiento.valueAsNumber;
+    const hh = hhDesdeRendimiento(cantidad,tasa);
+    if (!descripcion || !unidad || !Number.isFinite(cantidad) || cantidad<0 ||
+      (hh===null&&(!partida||Number.isFinite(tasa)))) {
+      estadoEjecucion.textContent = partida?'Revisa la cantidad y sus HH calculadas.':'Completa la actividad, su unidad, cantidad y rendimiento.';
       return;
     }
     enviarActividadPiloto(vista, {
-      p_item:null, p_descripcion:descripcion, p_unidad:unidad, p_cantidad:cantidad, p_hh:hh,
+      p_item:partida?.[0] ?? null, p_descripcion:descripcion, p_unidad:unidad, p_cantidad:cantidad, p_hh:hh,
     });
   });
 
@@ -8025,17 +8204,25 @@ const baseReporteGpro=[
 
   function mostrarPartidas(partidas, editable, referencias = []) {
     const conOrigen = referencias.length === partidas.length && referencias.length > 0;
-    const encabezados = (conOrigen?'<th scope="col">Fila Excel</th>':'')+
-      cabecera.map(columna => '<th scope="col">' + esc(columna) + '</th>').join('');
-    const cuerpo = partidas.map((partida, fila) => '<tr>' + (conOrigen?'<td>'+esc(referencias[fila])+'</td>':'')+
+    const identidad = [...(conOrigen?['Fila Excel']:[]),...cabecera.slice(0,4)];
+    const encabezados = identidad.map(c=>'<th scope="col" rowspan="2">'+esc(c)+'</th>').join('')+
+      diasSemana.map(d=>'<th scope="colgroup" colspan="2" class="plan-grupo-dia">'+esc(d)+'</th>').join('')+
+      '<th scope="col" rowspan="2">Rendimiento<br><small>HH/unidad</small></th>';
+    const cuerpo = partidas.map((partida, fila) => '<tr>'+(conOrigen?'<td>'+esc(referencias[fila])+'</td>':'')+
       cabecera.map((columna, indice) => {
-      const valor = partida[indice];
-      const contenido = editable && indice >= 4 && indice < 12
-        ? '<input data-fila="' + fila + '" data-columna="' + indice + '" inputmode="decimal" value="' + esc(valor) + '" aria-label="' + esc(columna + ' · ' + partida[0]) + '">'
-        : esc(typeof valor === 'number' ? num(valor) : valor);
-      return '<td>' + contenido + '</td>';
-    }).join('') + '</tr>').join('');
-    tablaPlan.innerHTML = '<table><caption>Partidas del plan semanal</caption><thead><tr>' + encabezados + '</tr></thead><tbody>' + cuerpo + '</tbody></table>';
+        const valor = partida[indice];
+        if (!editable) return '<td>'+esc(typeof valor === 'number' ? (indice===12?valor.toLocaleString('es-CL',{maximumSignificantDigits:15}):num(valor)) : valor)+'</td>';
+        if (indice>=5 && indice<12 && indice%2===1) {
+          const hh=hhProgramadasPlan(partida[indice-1],partida[12]);
+          return '<td class="plan-hh"><output data-hh-plan="'+(indice-1)+'">'+(hh===null?'—':num(hh))+'</output></td>';
+        }
+        return '<td><input data-fila="'+fila+'" data-columna="'+indice+'" '+(indice>=4?'inputmode="decimal" placeholder="0" ':'')+
+          'value="'+esc(indice===12&&typeof valor==='number'?String(valor).replace('.',','):valor)+'" aria-label="'+esc(columna+' · '+partida[0])+'"></td>';
+      }).join('')+'</tr>').join('');
+    const ayuda = editable ? '<p class="plan-ayuda">Los campos numéricos vacíos se guardan como 0. Las HH se calculan como Q × rendimiento y se redondean a dos decimales.</p>' : '';
+    const grupos = '<colgroup span="'+identidad.length+'"></colgroup>'+diasSemana.map(()=>'<colgroup span="2"></colgroup>').join('')+'<colgroup span="1"></colgroup>';
+    tablaPlan.innerHTML = ayuda+'<table><caption>Partidas del plan semanal</caption>'+grupos+'<thead><tr>'+encabezados+'</tr><tr>'+
+      diasSemana.map(()=>'<th scope="col">Q</th><th scope="col">HH</th>').join('')+'</tr></thead><tbody>'+cuerpo+'</tbody></table>';
     tablaPlan.hidden = false;
   }
 
@@ -8077,7 +8264,6 @@ const baseReporteGpro=[
     panelPod.hidden = true;
     botonEjecucion.disabled = selectorJornada.disabled = actualizarJornada.disabled = false;
     formularioExcel.hidden = selectorHoja.hidden = origenPlan.hidden = avisosPlan.hidden = tablaPlan.hidden = botonGuardar.hidden = botonConsultar.hidden = true;
-    completarQVacias.hidden = true;
     formularioExcel.reset();
     hojaPlan.replaceChildren();
     origenPlan.textContent = '';
@@ -8234,8 +8420,7 @@ const baseReporteGpro=[
     avisosPlan.hidden = !avisos.length;
     mostrarPartidas(opcion.filas,true,opcion.referencias);
     botonGuardar.hidden = false;
-    completarQVacias.hidden = !opcion.vaciosQ?.some(([fila,columna])=>opcion.filas[fila][columna]==='');
-    estado.textContent = 'Hoja «'+opcion.hoja+'» · '+rangoSemana(vista.lunes)+'. Revisa las cantidades y HH antes de guardar.';
+    estado.textContent = 'Hoja «'+opcion.hoja+'» · '+rangoSemana(vista.lunes)+'. Puedes corregir las partidas, la Q y el rendimiento antes de guardar.';
   }
 
   formularioExcel.addEventListener('submit', async event => {
@@ -8250,26 +8435,21 @@ const baseReporteGpro=[
     vista.ocupado = true;
     vista.borrador = null;
     selectorHoja.hidden = origenPlan.hidden = avisosPlan.hidden = tablaPlan.hidden = botonGuardar.hidden = true;
-    completarQVacias.hidden = true;
     estado.textContent = 'Leyendo trisemanal…';
     try {
       const lectura = await leerPlan(await contenidoArchivoExcel(archivo), true, vista.lunes);
       if (vistaPlanRemoto !== vista) return;
       const opciones = lectura.opciones.filter(opcion => opcion.lunes === vista.lunes && opcion.filas.length);
       if (!opciones.length) throw new Error('El Excel no contiene partidas programadas para el lunes ' + vista.lunes + '.');
-      const compatibles = opciones.filter(opcion => !opcion.contratoOrigen || opcion.contratoOrigen === vista.codigo || (
-        vista.codigo === 'PILOTO-001' && opcion.contratoOrigen === '4600031587' && /_EJEMPLO\.xlsx$/i.test(archivo.name)
-      ));
-      if (!compatibles.length) throw new Error('El Excel declara el contrato ' + opciones[0].contratoOrigen + '. Abre ese contrato para cargar su plan.');
-      vista.borrador = {archivo: archivo.name, opciones: compatibles};
-      hojaPlan.replaceChildren(...compatibles.map((opcion, indice) => {
+      vista.borrador = {archivo: archivo.name, opciones};
+      hojaPlan.replaceChildren(...opciones.map((opcion, indice) => {
         const item = document.createElement('option');
         item.value = indice;
         item.textContent = opcion.hoja;
         return item;
       }));
       hojaPlan.value = '0';
-      selectorHoja.hidden = compatibles.length < 2;
+      selectorHoja.hidden = opciones.length < 2;
       mostrarRevision(vista);
     } catch (error) {
       if (vistaPlanRemoto === vista) estado.textContent = error instanceof RangeError ? 'El archivo está incompleto o dañado.' : error.message;
@@ -8283,22 +8463,12 @@ const baseReporteGpro=[
     if (fila == null || !vistaPlanRemoto?.borrador) return;
     const opcion = vistaPlanRemoto.borrador.opciones[Number(hojaPlan.value)];
     opcion.filas[Number(fila)][Number(columna)] = event.target.value.trim();
-    completarQVacias.hidden = !opcion.vaciosQ?.some(([i,j])=>opcion.filas[i][j]==='');
-  });
-
-  completarQVacias.addEventListener('click', () => {
-    const vista = vistaPlanRemoto;
-    if (!vista?.borrador || vista.ocupado || completarQVacias.hidden) return;
-    const opcion = vista.borrador.opciones[Number(hojaPlan.value)];
-    if (!confirm('¿Registrar como 0 las Q originalmente vacías que siguen sin completar y sus HH si también estaban vacías?')) return;
-    for (const [fila,columna,horasVacias] of opcion.vaciosQ) {
-      const valores = opcion.filas[fila];
-      if (valores[columna] !== '') continue;
-      valores[columna] = '0';
-      if (horasVacias && valores[columna+1]==='') valores[columna+1] = '0';
+    const valores = opcion.filas[Number(fila)];
+    for (const salida of event.target.closest('tr').querySelectorAll('[data-hh-plan]')) {
+      const q = Number(salida.dataset.hhPlan);
+      const hh = hhProgramadasPlan(valores[q],valores[12]);
+      salida.textContent = hh === null ? '—' : num(hh);
     }
-    mostrarRevision(vista);
-    botonGuardar.focus();
   });
 
   hojaPlan.addEventListener('change', () => {
