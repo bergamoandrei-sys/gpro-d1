@@ -309,6 +309,22 @@ td .clasificacion-cnc{grid-template-columns:minmax(160px,1fr)}
 .wip-mayor .wip-barra span{background:#be612f}
 @media(max-width:600px){.wip-jornada{position:static}.wip-carriles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .linea-little{min-width:895px}
+.linea-inventario-actual{grid-template-columns:repeat(3,minmax(82px,1fr) minmax(98px,1fr)) minmax(82px,1fr);min-width:640px}
+.linea-inventario-actual .tramo-proceso strong{font-size:clamp(1.25rem,2.2vw,1.7rem)}
+.linea-inventario-actual .tramo-proceso small{font-weight:700}
+.linea-inventario-actual .hito-proceso::before{margin-top:27px}
+@media(max-width:650px){
+  .linea-inventario-actual{min-width:0;grid-template-columns:minmax(0,1fr);gap:5px;padding:12px}
+  .linea-inventario-actual .hito-proceso{display:flex;gap:8px;align-items:center;text-align:left}
+  .linea-inventario-actual .hito-proceso::before{margin:0;flex:none}
+  .linea-inventario-actual .hito-proceso small{margin-inline-start:auto}
+  .linea-inventario-actual .tramo-proceso{grid-template-columns:2.25rem minmax(0,1fr);justify-items:start;align-items:center;
+    text-align:left;margin-inline-start:5px;border-inline-start:2px solid #5c9a92;padding:4px 9px;gap:2px 6px}
+  .linea-inventario-actual .tramo-proceso strong{grid-row:1 / span 2}
+  .linea-inventario-actual .tramo-proceso .flecha-proceso{display:none}
+  .linea-inventario-actual .tramo-proceso.mayor-demora{border-color:#be612f}
+  .linea-inventario-actual .tramo-proceso .marca-demora{grid-column:2}
+}
 .tramo-little strong{font-size:15px}
 .tramo-little small{max-width:100%;overflow-wrap:anywhere}
 .dashboard-nav{border-top:1px solid var(--line);padding-top:12px;margin-top:10px}
@@ -1072,6 +1088,25 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
 #piloto-foco-gpro .tendencia-serie li{flex:1 0 44px}
 #piloto-foco-gpro .foco-causas{padding-inline-start:1.4em}
 #piloto-foco-gpro .foco-causas li{padding:5px 0}
+
+#piloto-andon .andon-actividad{padding:12px 14px;margin:8px 0;border:1px solid #d5e2ec;border-radius:8px;background:#f2f7fb}
+#piloto-andon .andon-actividad[data-andon-activo="true"]{background:#fff0e7;border-color:#d89577;border-inline-start:5px solid #a64225;color:#712911}
+#piloto-andon .andon-actividad p{margin:5px 0;overflow-wrap:anywhere}
+#piloto-andon .andon-tiempo{font-size:1.2rem;font-variant-numeric:tabular-nums;font-weight:750}
+#piloto-andon .andon-vencido{display:none;margin-inline-start:6px;padding:2px 6px;border-radius:4px;background:#8f341b;color:#fff}
+#piloto-andon [data-vencido="true"] .andon-vencido{display:inline-block}
+#piloto .lista-pdca{list-style:none;padding:0;display:grid;gap:8px}
+#piloto .lista-pdca li{border:1px solid #dbe6ee;background:#f4f8fb;border-radius:8px;padding:10px 12px;overflow-wrap:anywhere}
+#piloto .lista-pdca p{margin:4px 0}
+#piloto .pdca-origen{display:block;color:#415e76;margin-top:4px}
+#piloto .pod-brechas h4{margin:0}
+
+#piloto .andon-cnc{border-radius:6px;background:#eff5f8;padding:7px 9px;margin-top:5px;overflow-wrap:anywhere}
+#piloto .andon-cnc[data-andon-activo="true"]{background:#fff0e5;border-inline-start:3px solid #ab4825;color:#762e17}
+#piloto .andon-cnc p{margin:3px 0}
+#piloto .andon-cnc .andon-tiempo{font-weight:750;font-variant-numeric:tabular-nums}
+#piloto .andon-cnc .andon-vencido{display:none}
+#piloto .andon-cnc[data-vencido="true"] .andon-vencido{display:inline;color:#922f16;font-weight:750}
 </style>
 </head>
 <body>
@@ -1472,6 +1507,7 @@ table tbody tr:focus-within{--fondo-fila:var(--tabla-fila-activa)}
             </div>
           </div>
           <p id="piloto-estado-descarga-diaria" role="status" hidden></p>
+          <aside id="piloto-andon" aria-label="Andon de actividades" hidden></aside>
           <aside id="piloto-observaciones-reporte" class="observacion-reporte" aria-live="polite" hidden></aside>
           <div id="piloto-progreso-reporte" class="card row" aria-label="Progreso del reporte diario" hidden></div>
           <section class="card" id="piloto-preparar-pod" hidden></section>
@@ -2054,55 +2090,37 @@ function ejemploRecorrido(porReporte=false){
 
 const tramosInventario=['Por digitar','Por enviar a ITO','Por recibir en ITO','Por validar'];
 
-function inventarioDatos(registros,corte){
-  const inventario=tramosInventario.map(()=>[]);
-  for(const r of registros){
-    if(r.base>corte||r.estado==='valid') continue;
-    let tramo;
-    if(r.estado==='obs') tramo=3;
-    else if(r.estado==='review') tramo=r.recepcion===null?2:3;
-    else tramo=r.digitacion!==null||r.digitado?1:0;
-    inventario[tramo].push(r);
-  }
-  return inventario;
+const hitosInventarioActual=['Inicio de jornada','Envío a ITO','Recepción ITO','Validación'];
+const tramosInventarioActual=tramosInventario.slice(1);
+
+function ejemploInventarioActual(){
+  return [
+    {jornada:'2026-11-09',conteos:[2,1,2]},
+    {jornada:'2026-11-10',conteos:[3,0,0]},
+    {jornada:'2026-11-11',conteos:[0,0,0]},
+    {jornada:'2026-11-12',conteos:[4,0,0]}
+  ].map(d=>({...d,inicio:baseEjecucion(d.jornada)}));
 }
 
-function ejemploInventario(){
-  const [dato]=ejemploRecorrido();
-  const futuro={...dato,jornada:'2026-11-12',base:baseEjecucion('2026-11-12'),estado:'prep',digitacion:null};
-  return [futuro,...[2,3,1,2].flatMap((n,tramo)=>Array.from({length:n},(_,i)=>({
-    ...dato,identificador:tramosInventario[tramo]+' · Ejemplo '+(i+1),
-    estado:tramo<2?'prep':tramo===2?'review':i===0?'obs':'review',
-    digitacion:tramo?dato.digitacion:null,recepcion:tramo===3?dato.inicio:null
-  })))];
-}
-
-function panelInventario(registros,corte){
-  const inventario=inventarioDatos(registros,corte);
-  const total=inventario.reduce((s,datos)=>s+datos.length,0);
-  const maximo=Math.max(...inventario.map(t=>t.length));
-  const hitos=[
-    ['Inicio','Jornada desde las 08:00'],
-    ['Digitación','Se inicia la sección'],
-    ['Envío a ITO','El dato queda enviado'],
-    ['Recepción ITO','ITO inicia la revisión'],
-    ['Validación','El dato queda validado']
-  ];
-  return '<section class="acumulacion-proceso" aria-labelledby="titulo-inventario"><h3 id="titulo-inventario">Inventario de datos pendientes</h3>'+
-    '<p class="muted">'+total+' '+(total===1?'dato pendiente':'datos pendientes')+' al '+horaMetrica(corte)+' · Santiago</p>'+
-    '<div class="scroll proceso-desplazable" tabindex="0" aria-label="Línea de inventario por tramo">'+
-    '<ol class="linea-proceso inventario-linea">'+hitos.map(([titulo,descripcion],i)=>
-      '<li class="hito-proceso hito-inventario"><strong>'+titulo+'</strong><small>'+descripcion+'</small></li>'+
-      (i<inventario.length?'<li class="tramo-proceso tramo-inventario'+(maximo>0&&inventario[i].length===maximo?' con-pendientes':'')+'"><strong>'+
-        inventario[i].length+'</strong><span class="flecha-proceso" aria-hidden="true"></span><small>'+tramosInventario[i]+'</small>'+
-        (maximo>0&&inventario[i].length===maximo?'<small class="marca-demora">Mayor acumulación</small>':'')+'</li>':'')
-    ).join('')+'</ol></div>'+
-    '<p class="muted">Cada dato ocupa un solo tramo. La jornada entra al conteo desde las 08:00. En Actividades se incluyen las filas previstas del POD cerrado o, si sigue abierto, del Plan Semanal. En los demás itemizados se cuentan los datos existentes.</p>'+
-    '<p class="muted">Los observados siguen por validar. Si se reenvían, quedan por recibir hasta que ITO tome el nuevo envío.</p>'+
-    (total?'<details><summary>Ver datos pendientes por tramo</summary>'+
-      tabla(['Tramo','Jornada','Sección','Dato'],inventario.flatMap((datos,i)=>datos.map(r=>
-        fila([tramosInventario[i],fechaCorta(r.jornada),bloques[r.k],esc(r.identificador)]) )).join(''))+
-      '</details>':'')+'</section>';
+function panelInventarioActual(iniciadas,ultimoDato,ejemplo=false){
+  const totales=tramosInventarioActual.map((_,i)=>iniciadas.reduce((s,d)=>s+d.conteos[i],0));
+  const total=totales.reduce((s,n)=>s+n,0), mayor=Math.max(...totales);
+  const estado=iniciadas.length?total+' '+(total===1?'pendiente':'pendientes')+' · '+iniciadas.length+
+    (iniciadas.length===1?' jornada iniciada':' jornadas iniciadas'):'Aún no se inicia ninguna jornada del filtro.';
+  return '<p class="total-proceso"><strong>'+estado+'</strong><span>'+
+    (ejemplo?'Ejemplo ficticio.':'Datos consultados · <time data-corte-inventario>'+horaMetrica(ultimoDato)+'</time> · Santiago')+'</span></p>'+
+    '<div class="scroll proceso-desplazable" tabindex="0" aria-label="Inventario actual por etapa">'+
+    '<ol class="linea-proceso linea-inventario-actual">'+hitosInventarioActual.map((hito,i)=>{
+      const cantidad=totales[i],destacado=mayor>0&&cantidad===mayor;
+      return '<li class="hito-proceso"><strong>'+hito+'</strong>'+(i===0?'<small>08:00 · Santiago</small>':'')+'</li>'+
+        (i<totales.length?'<li class="tramo-proceso tramo-little'+(destacado?' mayor-demora':'')+'"><strong>'+
+          num(cantidad)+'</strong><span class="flecha-proceso" aria-hidden="true"></span><small>'+
+          tramosInventarioActual[i]+'</small>'+(destacado?'<small class="marca-demora">Mayor acumulación</small>':'')+'</li>':'');
+    }).join('')+'</ol></div>'+
+    '<p class="muted">A las 08:00 de cada jornada se incorporan sus partidas pendientes de envío. El inventario avanza al enviar, al iniciar la revisión y al validar. Una observación permanece por validar y el reenvío vuelve a recepción. Se incluyen las CNC y declaraciones pendientes que ya existen.</p>'+
+    (iniciadas.length?'<details data-inventario-desglose><summary>Ver desglose por jornada</summary>'+
+      tabla(['Jornada',...tramosInventarioActual],iniciadas.map(d=>fila([fechaCorta(d.jornada),...d.conteos])).join(''))+
+      '</details>':'');
 }
 
 const lunesDeFecha=jornada=>fechaDesde(jornada,-((new Date(jornada+'T00:00:00Z').getUTCDay()+6)%7));
@@ -3854,6 +3872,7 @@ const baseReporteGpro=[
   const tituloReporte = document.querySelector('#piloto-titulo-reporte');
   const progresoReporte = document.querySelector('#piloto-progreso-reporte');
   const observacionesReporte = document.querySelector('#piloto-observaciones-reporte');
+  const panelAndon = document.querySelector('#piloto-andon');
   const indiceJornadas = document.querySelector('#piloto-indice-jornadas');
   const planificacionJornadas = document.querySelector('#piloto-planificacion-jornadas');
   const progresoJornadas = document.querySelector('#piloto-progreso-jornadas');
@@ -4056,7 +4075,7 @@ const baseReporteGpro=[
     const horas = causas.map(f=>cantidadComparable(f.cnc.hh_afectadas)).filter(hh=>hh!==null);
     const impacto = horas.length ? num(horas.reduce((total,hh)=>total+hh,0))+' HH atribuidas' : '';
     const pendientes = causas.length-horas.length;
-    cncDiarias.innerHTML = '<h3>Causas de no cumplimiento</h3>'+
+    cncDiarias.innerHTML = '<h3>Causas de no cumplimiento</h3><div data-andon-cnc hidden></div>'+
       (bloque?'<p><strong>Ronda '+bloque.ronda+' · '+esc(estadosIto[estado])+'</strong></p>':'')+
       (causas.length?'<p>'+[impacto,pendientes?pendientes+(pendientes===1?' causa sin HH':' causas sin HH'):''].filter(Boolean).join(' · ')+'</p>':'')+
       (causas.length
@@ -4077,7 +4096,11 @@ const baseReporteGpro=[
   });
   vistasReporte.addEventListener('click', evento => {
     const boton = evento.target.closest('[data-vista-reporte]');
-    if (boton) mostrarVistaReporte(boton.dataset.vistaReporte);
+    if (boton) {
+      mostrarVistaReporte(boton.dataset.vistaReporte);
+      if (boton.dataset.vistaReporte==='cnc' && vistaPlanRemoto?.jornada)
+        consultarAndonesCnc(vistaPlanRemoto,vistaPlanRemoto.jornada);
+    }
   });
 
   menuPiloto.addEventListener('click', evento => {
@@ -4368,6 +4391,7 @@ const baseReporteGpro=[
           estado.observados+' observadas</small>' : '')+
         (estado?.cnc?'<small>CNC · '+esc(estadosIto[estado.cnc.estado])+'</small>':'')+
         (observadas?'<span class="aviso-observacion">'+observadas+(observadas===1?' observación de ITO':' observaciones de ITO')+'</span>':'')+
+        (estado?.andonActivos?'<span class="aviso-observacion">Andon activos · '+estado.andonActivos+'</span>':'')+
         (estado?.formal?'<span class="status '+(estado.formal.observado?'obs':'valid')+'">'+
           textoCierreIto(estado.formal)+'</span>':'')+
         (alertas ? '<span class="status restr-abierta">'+alertas+(alertas===1?' alerta de terreno':' alertas de terreno')+'</span>' : '')+
@@ -4697,8 +4721,8 @@ const baseReporteGpro=[
     return rondas;
   }
 
-  function datosMetricasPiloto(filtro,planes,pods,actividades,cnc,cierres,corte,digitaciones=[],vacias=[]) {
-    const datos = [], reportes = [], tendencias = [], inventario = [];
+  function datosMetricasPiloto(filtro,planes,pods,actividades,cnc,cierres,corte,vacias=[]) {
+    const datos = [], reportes = [], tendencias = [];
     const hora = t=>instanteAlCorte(t,corte);
     const alcance = (lista,lunes,d)=>lista.filter(r=>r.lunes===lunes&&r.jornada===d);
     for (const {lunes,partidas} of planes) for (let d=0;d<4;d++) {
@@ -4708,7 +4732,6 @@ const baseReporteGpro=[
       const bloquesCnc = alcance(cnc,lunes,d).filter(r=>hora(r.enviado_en)!==null).sort((a,b)=>a.ronda-b.ronda);
       const cierre = hora(alcance(cierres,lunes,d)[0]?.cerrado_en);
       const pod = alcance(pods,lunes,d)[0];
-      const digitacion = hora(alcance(digitaciones,lunes,d)[0]?.iniciado_en);
       const podCerrado = hora(pod?.cerrado_en)!==null||(!pod&&(registros.length>0||cierre!==null));
       const metas = metasPodPiloto(partidas,d,podCerrado?pod:null);
       const dePlan = new Set(partidas.filter(p=>qDia(p,d)>0||hhDia(p,d)>0).map(p=>p[0]));
@@ -4767,10 +4790,8 @@ const baseReporteGpro=[
         revisadas:calidad.primeras.length,observadas:calidad.primeras.length-calidad.aprobadas,
         errores:calidad.primeras.length?calidad.primeras.length-calidad.aprobadas:null,
         fpy:calidad.primeras.length?100*calidad.aprobadas/calidad.primeras.length:null});
-      const conteos = conteosWipPiloto(metas,registros,bloque,declaracion,digitacion!==null);
-      inventario.push({jornada,conteos});
     }
-    return {datos,reportes,tendencias,inventario};
+    return {datos,reportes,tendencias};
   }
 
   function littlePiloto(planes,actividades,digitaciones,corte) {
@@ -4805,7 +4826,7 @@ const baseReporteGpro=[
   function presentarMetricasPiloto(vista) {
     const m = vista.metricas;
     if (!m || !m.ejemplo && !m.base) return;
-    const {datos,reportes,tendencias,inventario} = m.ejemplo ? {
+    const {datos,reportes,tendencias} = m.ejemplo ? {
       datos:m.seccion==='flujo'?ejemploRecorrido():m.seccion==='sigma'?ejemploSixSigma():ejemploEventosMetricas(),
       reportes:ejemploRecorrido(true),tendencias:ejemploTendencias(),
     } : m.base;
@@ -4825,8 +4846,10 @@ const baseReporteGpro=[
     };
     const vistas = {
       flujo:()=>flujo(reportes,true)+flujo(datos,false),
-      inventario:()=>(m.ejemplo?panelInventario(ejemploInventario(),instanteSantiago('2026-11-09','17:00:00')):
-        tabla(['Jornada',...tramosInventario],inventario.map(d=>fila([fechaCorta(d.jornada),...d.conteos])).join('')))+
+      inventario:()=>'<section class="acumulacion-proceso" aria-labelledby="titulo-inventario">'+
+        '<div class="row split"><h3 id="titulo-inventario">Inventario actual</h3>'+
+        (m.ejemplo?'':'<button type="button" data-actualizar-inventario>Actualizar inventario</button>')+'</div>'+
+        '<p data-estado-inventario role="status"></p><div data-inventario-actual></div></section>'+
         panelLittle(m.filtro,m.corte,m.ejemplo,m.little),
       calidad:()=>panelCalidad(datos,m.costo),
       nivelacion:()=>panelNivelacion(datos),
@@ -4836,7 +4859,120 @@ const baseReporteGpro=[
         m.variacion?panelVariacionQ(m.variacion):'<p>Consultando V1, V2 y V3 de las semanas del período…</p>',
     };
     contenidoMetricasPiloto.innerHTML = vistas[m.seccion]();
+    if (m.seccion==='inventario') mostrarInventarioMetricas(m,true);
   }
+
+  function inventarioMetricas(filtro,planes,pods,actividades,cnc,vacias){
+    const agrupar = registros=>{
+      const mapa = new Map();
+      for (const r of registros) {
+        const clave = fechaDesde(r.lunes,r.jornada);
+        const filas = mapa.get(clave)??[];
+        filas.push(r);
+        mapa.set(clave,filas);
+      }
+      return mapa;
+    };
+    const porPod=agrupar(pods), porActividad=agrupar(actividades);
+    const porCnc=agrupar(cnc.filter(r=>r.vigente)), porVacia=agrupar(vacias.filter(r=>r.vigente));
+    return planes.flatMap(({lunes,partidas})=>diasSemana.flatMap((_,d)=>{
+      const jornada=fechaDesde(lunes,d);
+      if (jornada<filtro.desde||jornada>filtro.hasta) return [];
+      const pod=porPod.get(jornada)?.[0], registros=porActividad.get(jornada)??[];
+      const metas=metasPodPiloto(partidas,d,pod?.cerrado_en?pod:null);
+      const bloque=porCnc.get(jornada)?.[0], vacia=porVacia.get(jornada)?.[0];
+      if (!metas.length&&!registros.length&&!bloque&&!vacia&&!pod?.cerrado_en) return [];
+      const conteos=conteosWipPiloto(metas,registros,bloque,vacia,false);
+      return [{jornada,inicio:baseEjecucion(jornada),conteos:[conteos[0]+conteos[1],conteos[2],conteos[3]]}];
+    }));
+  }
+
+  function mostrarInventarioMetricas(m,forzar=false){
+    const estado=contenidoMetricasPiloto.querySelector('[data-estado-inventario]');
+    const panel=contenidoMetricasPiloto.querySelector('[data-inventario-actual]');
+    if (!panel) return;
+    const corte=m.ejemplo?instanteSantiago('2026-11-11','17:00:00'):Date.now();
+    const datos=m.ejemplo?ejemploInventarioActual():m.inventarioActual;
+    const texto=m.errorInventario ?
+      'No se pudo actualizar el inventario. '+(datos?'Se muestran los últimos datos consultados.':'Pulsa Actualizar inventario para reintentar.') :
+      datos?'':'Consultando inventario…';
+    if (estado.textContent!==texto) estado.textContent=texto;
+    if (!datos) return;
+    const iniciadas=datos.filter(d=>d.inicio<=corte);
+    m.proximoIngreso=datos.find(d=>d.inicio>corte)?.inicio ?? Infinity;
+    const clave=JSON.stringify([m.ejemplo,iniciadas]);
+    if (!forzar && panel.dataset.datosInventario===clave) {
+      const hora=panel.querySelector('[data-corte-inventario]');
+      if (hora && hora.dataset.corte!==String(m.corteInventario)) {
+        hora.textContent=horaMetrica(m.corteInventario);
+        hora.dataset.corte=m.corteInventario;
+      }
+      return;
+    }
+    const detallePrevio=panel.querySelector('[data-inventario-desglose]');
+    const scroll=panel.querySelector('.proceso-desplazable');
+    const posicion=scroll?.scrollLeft ?? 0;
+    const focoScroll=document.activeElement===scroll;
+    const focoDetalle=document.activeElement===detallePrevio?.querySelector('summary');
+    panel.innerHTML=panelInventarioActual(iniciadas,m.corteInventario,m.ejemplo);
+    panel.dataset.datosInventario=clave;
+    panel.querySelector('.proceso-desplazable').scrollLeft=posicion;
+    const detalle=panel.querySelector('[data-inventario-desglose]');
+    if (detalle) detalle.open=Boolean(detallePrevio?.open);
+    if (focoDetalle) detalle?.querySelector('summary').focus({preventScroll:true});
+    if (focoScroll) panel.querySelector('.proceso-desplazable').focus({preventScroll:true});
+  }
+
+  function inventarioMetricasVisible(vista){
+    return vista===vistaPlanRemoto && !panelPlan.hidden && !panelMetricasPiloto.hidden &&
+      vista?.metricas?.seccion==='inventario' && !vista.metricas.ejemplo;
+  }
+
+  async function actualizarInventarioMetricas(vista){
+    if (!inventarioMetricasVisible(vista)) return;
+    const m=vista.metricas, solicitud=m.solicitud;
+    if (!m.base || m.consultandoInventario?.solicitud===solicitud) return;
+    const consulta={solicitud};
+    m.consultandoInventario=consulta;
+    const vigente=()=>inventarioMetricasVisible(vista)&&m.solicitud===solicitud&&m.consultandoInventario===consulta;
+    const {contrato,desde,hasta}=m.filtro;
+    const filtro='&contrato_codigo=eq.'+encodeURIComponent(contrato)+
+      '&lunes=gte.'+lunesDeFecha(desde)+'&lunes=lte.'+lunesDeFecha(hasta);
+    const paginar=(relacion,campos,orden,cursor,extra='')=>consultarPaginasPiloto(
+      '/rest/v1/'+relacion+'?select='+campos+'&order='+orden+'&limit=300'+filtro+extra,cursor,vigente);
+    const porJornada=r=>'&or=(lunes.gt.'+r.lunes+',and(lunes.eq.'+r.lunes+',jornada.gt.'+r.jornada+'))';
+    const bloque=(relacion)=>paginar(relacion,'lunes,jornada,estado,iniciado_en,vigente','lunes.asc,jornada.asc',porJornada,'&vigente=eq.true')
+      .catch(error=>{if(relacion==='gpro_actividades_vacias'&&['PGRST205','42P01'].includes(error.codigo)) return [];throw error;});
+    try {
+      const [planes,pods,actividades,cnc,vacias]=await Promise.all([
+        paginar('gpro_planes_semanales','lunes,partidas','lunes.asc',despuesDeLunes),
+        paginar('gpro_pods','lunes,jornada,metas,cerrado_en','lunes.asc,jornada.asc',porJornada),
+        paginar('gpro_ejecucion_diaria','id,lunes,jornada,item_plan,estado_ito,revision,gpro_inicios_revision(revision,iniciado_en)',
+          'id.asc',despuesDeId),
+        bloque('gpro_revision_cnc'),bloque('gpro_actividades_vacias'),
+      ]);
+      if (!vigente()) return;
+      m.inventarioActual=inventarioMetricas(m.filtro,planes,pods,actividades,cnc,vacias);
+      m.corteInventario=Date.now();
+      m.errorInventario=false;
+    } catch {
+      if (vigente()) m.errorInventario=true;
+    } finally {
+      if (vigente()) mostrarInventarioMetricas(m);
+      if (m.consultandoInventario===consulta) m.consultandoInventario=null;
+    }
+  }
+
+  setInterval(()=>{
+    if (!document.hidden && inventarioMetricasVisible(vistaPlanRemoto) &&
+      vistaPlanRemoto.metricas.proximoIngreso<=Date.now()) mostrarInventarioMetricas(vistaPlanRemoto.metricas);
+  },1000);
+  document.addEventListener('visibilitychange',()=>{
+    if (!document.hidden && inventarioMetricasVisible(vistaPlanRemoto)) {
+      mostrarInventarioMetricas(vistaPlanRemoto.metricas);
+      actualizarInventarioMetricas(vistaPlanRemoto);
+    }
+  });
 
   async function cargarMetricasPiloto(vista,aplicarFiltro=false) {
     const filtro = Object.fromEntries(new FormData(formMetricasPiloto));
@@ -4849,22 +4985,13 @@ const baseReporteGpro=[
     m.filtro = filtro;
     m.ejemplo = false;
     mostrarModoMetricasPiloto(false);
-    m.base = m.variacion = null;
+    m.base = m.variacion = m.inventarioActual = null;
+    m.errorInventario = false;
     panelMetricasPiloto.querySelector('[data-pestanas-metricas]').replaceChildren();
     contenidoMetricasPiloto.replaceChildren();
     estadoMetricasPiloto.textContent = 'Consultando historial del proceso…';
     const vigente = ()=>vistaPlanRemoto===vista&&m.solicitud===solicitud;
-    const paginar = async (ruta,cursor) => {
-      const filas = [];
-      let ultimo = '';
-      while (vigente()) {
-        const lote = await solicitar(ruta+'&limit=300'+ultimo,{},token);
-        if (!lote.length) break;
-        filas.push(...lote);
-        ultimo = cursor(lote.at(-1));
-      }
-      return filas;
-    };
+    const paginar = (ruta,cursor)=>consultarPaginasPiloto(ruta+'&limit=300',cursor,vigente);
     const alcance = '&contrato_codigo=eq.'+encodeURIComponent(filtro.contrato)+
       '&lunes=gte.'+fechaDesde(filtro.desde,-3)+'&lunes=lte.'+filtro.hasta;
     const limiteFecha = r=>'&lunes=gt.'+r.lunes;
@@ -4879,24 +5006,26 @@ const baseReporteGpro=[
         paginar(rutaJornadas('gpro_pods','metas,cerrado_en'),despuesJornada),
         paginar('/rest/v1/gpro_ejecucion_diaria?select=id,lunes,jornada,item_plan,descripcion,cantidad,hh,estado_ito,revision,creado_en,'+
           'gpro_historial_revision(revision,evento,registrado_en),gpro_inicios_revision(revision,iniciado_en)&order=id.asc'+alcanceActividades,r=>'&id=gt.'+encodeURIComponent(r.id)),
-        paginar('/rest/v1/gpro_revision_cnc?select=lunes,jornada,ronda,causas,estado,enviado_en,iniciado_en,decidido_en&order=lunes.asc,jornada.asc,ronda.asc'+alcance,
+        paginar('/rest/v1/gpro_revision_cnc?select=lunes,jornada,ronda,causas,estado,enviado_en,iniciado_en,decidido_en,vigente&order=lunes.asc,jornada.asc,ronda.asc'+alcance,
           r=>'&or=(lunes.gt.'+r.lunes+',and(lunes.eq.'+r.lunes+',jornada.gt.'+r.jornada+'),and(lunes.eq.'+r.lunes+',jornada.eq.'+r.jornada+',ronda.gt.'+r.ronda+'))'),
         paginar(rutaJornadas('gpro_cierres_diarios','cerrado_en'),despuesJornada),
         paginar(rutaJornadas('gpro_digitacion_actividades','iniciado_en'),despuesJornada).catch(error=>{
           if (['PGRST205','42P01'].includes(error.codigo)) return [];
           throw error;
         }),
-        paginar('/rest/v1/gpro_actividades_vacias?select=lunes,jornada,ronda,estado,enviado_en,iniciado_en,decidido_en&order=lunes.asc,jornada.asc,ronda.asc'+alcance,
+        paginar('/rest/v1/gpro_actividades_vacias?select=lunes,jornada,ronda,estado,enviado_en,iniciado_en,decidido_en,vigente&order=lunes.asc,jornada.asc,ronda.asc'+alcance,
           r=>'&or=(lunes.gt.'+r.lunes+',and(lunes.eq.'+r.lunes+',jornada.gt.'+r.jornada+'),and(lunes.eq.'+r.lunes+',jornada.eq.'+r.jornada+',ronda.gt.'+r.ronda+'))')
           .catch(error=>{if (['PGRST205','42P01'].includes(error.codigo)) return [];throw error;}),
       ]);
       if (!vigente()) return;
-      m.base = datosMetricasPiloto(filtro,planes,pods,actividades,cnc,cierres,corte,digitaciones,vacias);
+      m.base = datosMetricasPiloto(filtro,planes,pods,actividades,cnc,cierres,corte,vacias);
       m.corte = corte;
+      m.inventarioActual=inventarioMetricas(filtro,planes,pods,actividades,cnc,vacias);
+      m.corteInventario=Date.now();
       m.little = littlePiloto(planes,actividades,digitaciones,corte);
       m.planes = planes.filter(p=>baseEjecucion(p.lunes)<=corte);
       m.pods = pods;
-      estadoMetricasPiloto.textContent = filtro.contrato+' · Corte '+horaMetrica(corte)+' (Santiago)';
+      estadoMetricasPiloto.textContent = filtro.contrato+' · Corte del análisis '+horaMetrica(corte)+' (Santiago)';
       presentarMetricasPiloto(vista);
       if (m.seccion==='variacion') cargarVariacionMetricas(vista);
     } catch (error) {
@@ -4950,6 +5079,10 @@ const baseReporteGpro=[
     const vista = vistaPlanRemoto;
     const m = vista?.metricas;
     if (!m) return;
+    if (e.target.closest('[data-actualizar-inventario]')) {
+      actualizarInventarioMetricas(vista);
+      return;
+    }
     if (e.target.closest('[data-ejemplo-metricas]')) {
       if (m.ejemplo) return cargarMetricasPiloto(vista);
       m.solicitud = {};
@@ -4971,6 +5104,7 @@ const baseReporteGpro=[
     const tab = e.target.closest('[data-metrica-piloto]');
     if (!tab||!m.base&&!m.ejemplo) return;
     m.seccion = tab.dataset.metricaPiloto;
+    if (m.seccion!=='inventario') m.consultandoInventario=null;
     if (m.seccion==='tendencias' && !m.ejemplo && !m.filtroAplicado && !m.tendenciasInicializadas) {
       m.tendenciasInicializadas = true;
       formMetricasPiloto.elements.desde.value = fechaDesde(vista.lunes,-21);
@@ -4980,6 +5114,7 @@ const baseReporteGpro=[
     presentarMetricasPiloto(vista);
     panelMetricasPiloto.querySelector('[aria-pressed="true"][data-metrica-piloto]')?.focus();
     if (m.seccion==='variacion' && !m.ejemplo) cargarVariacionMetricas(vista);
+    if (m.seccion==='inventario' && !m.ejemplo) actualizarInventarioMetricas(vista);
   });
 
   function mostrarResumenJornadas(vista) {
@@ -5064,7 +5199,8 @@ const baseReporteGpro=[
       if (vista.perfil !== 'ITO' && !contrato.length) throw new Error('No se pudieron comprobar las HH del contrato.');
       const hhContrato = contrato[0]?.hh_totales ?? null;
       const inventario = Array.isArray(pods);
-      const rutaRegistros = inventario ? ruta.replace('&order=',',gpro_inicios_revision(revision,iniciado_en)&order=') : ruta;
+      const rutaRegistros = inventario ? ruta.replace('&order=',',gpro_inicios_revision(revision,iniciado_en),'+
+        'gpro_historial_revision(revision,evento,estado_ito,registrado_en)&order=') : ruta;
       const [registros, cnc, formal, vacias, inicios, borradores] = await Promise.all([
         consultarPaginasPiloto(rutaRegistros, despuesDeId, vigente),
         inventario ? opcional(solicitar('/rest/v1/gpro_revision_cnc?select=jornada,ronda,estado,causas,iniciado_en&vigente=eq.true'+filtro,{},token)) : null,
@@ -5082,6 +5218,7 @@ const baseReporteGpro=[
       dias.forEach((dia,d)=>{
         dia.cnc = cnc?.find(b=>b.jornada===d);
         dia.vacia = vacias?.find(b=>b.jornada===d);
+        dia.andonActivos = registros.filter(r=>r.jornada===d&&ciclosAndon(r.gpro_historial_revision).some(c=>!c.fin)).length;
         const ultimo = formal?.find(c=>c.jornada===d);
         if (cierreItoVigente(ultimo,dia.cnc,registros.filter(r=>r.jornada===d),dia.vacia)) dia.formal=ultimo;
       });
@@ -5210,7 +5347,14 @@ const baseReporteGpro=[
     abrirReportePiloto(vistaPlanRemoto,boton.dataset.jornadaPpc);
   });
   setInterval(() => {
-    if (vistaPlanRemoto && !reporteAbierto.hidden) mostrarWipJornadaPiloto(vistaPlanRemoto);
+    if (!document.hidden) actualizarInventarioMetricas(vistaPlanRemoto);
+    if (vistaPlanRemoto && !reporteAbierto.hidden) {
+      mostrarWipJornadaPiloto(vistaPlanRemoto);
+      if (!document.hidden && vistaPlanRemoto.jornada?.registros) {
+        consultarAndon(vistaPlanRemoto,vistaPlanRemoto.jornada);
+        consultarAndonesCnc(vistaPlanRemoto,vistaPlanRemoto.jornada);
+      }
+    }
     if (!vistaPlanRemoto || panelPlan.hidden || panelPod.hidden || indiceJornadas.hidden) return;
     const etapas = etapasJornada(Date.now(),vistaPlanRemoto);
     mostrarProgresoJornadas(vistaPlanRemoto,etapas);
@@ -5238,11 +5382,98 @@ const baseReporteGpro=[
     const filtro = '&contrato_codigo=eq.' + encodeURIComponent(vista.codigo) + '&tipo=eq.' + vista.tipo;
     const ruta = '/rest/v1/gpro_gestion_contrato?select=id,lunes,partidas,detalle,accion,responsable,fecha_registro,plazo,cerrado_en&order=id.asc&limit=500'+filtro+
       (vista.lunes ? '&or=(lunes.is.null,lunes.eq.'+vista.lunes+')' : '');
-    const registros = await consultarPaginasPiloto(ruta,despuesDeId,()=>gestion===vista);
+    const vigente = ()=>gestion===vista;
+    const camposPdca = ',brecha_fecha,brecha_tipo,brecha_item,etapa_pdca,historial_pdca';
+    const camposCnc = ',cnc_fecha,cnc_abierto_en';
+    const consultarCompromisos = campos=>consultarPaginasPiloto(ruta.replace('&order=',campos+'&order='),despuesDeId,vigente);
+    const sinColumna = error=>['PGRST204','42703'].includes(error.codigo);
+    const registros = await (vista.tipo==='restriccion' ? consultarPaginasPiloto(ruta,despuesDeId,vigente) :
+      consultarCompromisos(camposPdca+camposCnc).catch(error=>{
+        if (!sinColumna(error)) throw error;
+        return consultarCompromisos(camposPdca).catch(error=>{
+          if (!sinColumna(error)) throw error;
+          return consultarCompromisos('');
+        });
+      }));
     if (gestion !== vista) return;
     vista.registros = registros;
     mostrarGestion(vista,registros);
     estado.textContent = mensaje;
+  }
+
+  const nombresBrecha = {reportabilidad:'Reportabilidad',validacion:'Validación ITO',partida:'Cumplimiento de partida'};
+  const etapasPdca = {planificar:'Acción pendiente',verificar:'Por verificar',ajustar:'Por replantear',efectiva:'Efectiva'};
+  const eventosPdca = {planificar:'Acción acordada',hacer:'Acción aplicada',efectiva:'Verificada como efectiva',inefectiva:'Verificada como no efectiva'};
+
+  function historialPdca(registro) {
+    return '<details><summary>Historial PDCA</summary><ol>'+registro.historial_pdca.map(h=>
+      '<li><strong>'+esc(eventosPdca[h.evento])+'</strong> · '+hora(h.fecha)+'<p>'+esc(h.nota)+
+      (h.plazo?' · Plazo '+fechaCorta(h.plazo):'')+'</p></li>').join('')+'</ol></details>';
+  }
+
+  function medidasEfectivas(registros) {
+    const medidas = registros.filter(r=>r.etapa_pdca==='efectiva');
+    return '<section class="card"><h3>Medidas efectivas · Mejora continua</h3>'+
+      (medidas.length?'<ul class="lista-pdca">'+medidas.map(r=>'<li><strong>'+esc(r.accion)+'</strong>'+
+        '<p>'+esc(nombresBrecha[r.brecha_tipo])+' · '+esc(r.detalle)+'</p>'+
+        '<p>'+esc(r.historial_pdca.at(-1)?.nota)+' · '+esc(r.responsable)+'</p></li>').join('')+'</ul>':
+        '<p>Las medidas verificadas como efectivas se guardarán aquí.</p>')+'</section>';
+  }
+
+  function dialogoPdca(titulo,detalle,campos,accion,guardar) {
+    const dialogo = document.createElement('dialog');
+    dialogo.className = 'dialogo-cnc';
+    dialogo.setAttribute('aria-label',titulo);
+    dialogo.innerHTML = '<form><h3>'+esc(titulo)+'</h3><p>'+esc(detalle)+'</p>'+campos+
+      '<p role="status"></p><div class="row"><button type="button">Cancelar</button>'+
+      '<button type="submit" class="primary">'+esc(accion)+'</button></div></form>';
+    const formulario = dialogo.querySelector('form');
+    const botones = [...dialogo.querySelectorAll('button')];
+    botones[0].onclick = ()=>dialogo.close();
+    dialogo.addEventListener('cancel',e=>{if(botones[1].disabled)e.preventDefault();});
+    dialogo.addEventListener('close',()=>dialogo.remove(),{once:true});
+    formulario.onsubmit = async e=>{
+      e.preventDefault();
+      botones.forEach(b=>b.disabled=true);
+      const estado = dialogo.querySelector('[role="status"]');
+      estado.textContent = 'Guardando…';
+      try {
+        await guardar(Object.fromEntries(new FormData(formulario)));
+        dialogo.close();
+      } catch (error) {
+        estado.textContent = error.message || 'No se pudo guardar. Reintenta.';
+      } finally {
+        botones.forEach(b=>b.disabled=false);
+      }
+    };
+    panelGestion.closest('#piloto').append(dialogo);
+    dialogo.showModal();
+  }
+
+  function abrirPasoPdca(vista,registro) {
+    const replantear = registro.etapa_pdca==='ajustar';
+    const verificar = registro.etapa_pdca==='verificar';
+    const titulo = replantear?'Replantear acción':verificar?'Verificar efectividad':'Registrar acción aplicada';
+    const pregunta = replantear?'Nueva acción':verificar?'Evidencia o resultado observado':'Qué hiciste y cuándo';
+    const campos = (verificar?'<label>Resultado <select name="resultado" required><option value="">Selecciona</option>'+
+      '<option value="efectiva">Efectiva</option><option value="inefectiva">No efectiva</option></select></label>':'')+
+      '<label>'+pregunta+' <textarea name="nota" rows="3" maxlength="500" required></textarea></label>'+
+      (replantear?'<label>Nuevo plazo <input name="plazo" type="date" min="'+fechaHoy()+'" required></label>':'');
+    dialogoPdca(titulo,registro.accion,campos,'Guardar',async datos=>{
+      vista.ocupado = true;
+      try {
+        await solicitar('/rest/v1/rpc/gpro_seguir_pdca',{method:'POST',body:JSON.stringify({
+          p_id:registro.id,p_paso:registro.historial_pdca.length,
+          p_evento:replantear?'planificar':verificar?datos.resultado:'hacer',
+          p_nota:datos.nota.trim(),p_plazo:datos.plazo||null,
+        })},token);
+        await listarGestion(vista,'Seguimiento PDCA actualizado.').catch(()=>{
+          if(gestion===vista) estado.textContent = 'Seguimiento guardado. Vuelve a abrir Compromisos para actualizar.';
+        });
+      } finally {
+        vista.ocupado = false;
+      }
+    });
   }
 
   function mostrarGestion(vista,registros) {
@@ -5261,9 +5492,15 @@ const baseReporteGpro=[
         return esc(partida ? item+' · '+partida[2] : item);
       }).join('<br>');
       const estadoRegistro = grupo(registro);
-      const accion = registro.cerrado_en ? '—' :
+      const etapa = registro.etapa_pdca;
+      const accion = etapa ? (registro.cerrado_en?'':'<button type="button" data-paso-pdca="'+esc(registro.id)+'">'+
+        (etapa==='planificar'?'Registrar acción aplicada':etapa==='verificar'?'Verificar efectividad':'Replantear acción')+'</button>')+
+        historialPdca(registro) : registro.cerrado_en ? '—' :
         '<button type="button" data-cerrar-gestion="'+esc(registro.id)+'">'+(restriccion ? 'Cerrar restricción' : 'Marcar cumplido')+'</button>';
-      return fila([badge(estadoRegistro,etiquetas[estadoRegistro]), esc(registro.detalle), esc(registro.accion), esc(registro.responsable),
+      const etiqueta = etapa ? etapasPdca[etapa]+(estadoRegistro==='vencida'?' · Plazo vencido':'') : etiquetas[estadoRegistro];
+      const origen = etapa?'<small class="pdca-origen">POD · '+esc(nombresBrecha[registro.brecha_tipo])+' · '+fechaCorta(registro.brecha_fecha)+'</small>':'';
+      const andon = registro.cnc_abierto_en ? detalleAndonCnc(registro) : '';
+      return fila([badge(estadoRegistro,etiqueta), esc(registro.detalle)+origen+andon, esc(registro.accion), esc(registro.responsable),
         ...(restriccion ? [vinculadas || '—',registro.lunes?esc(rangoSemana(registro.lunes)):'Contrato'] : []),
         fechaCorta(registro.fecha_registro), fechaCorta(registro.plazo),
         registro.cerrado_en ? fechaCorta(fechaCortaSantiago.format(Date.parse(registro.cerrado_en))) : '—',
@@ -5275,7 +5512,9 @@ const baseReporteGpro=[
       (filas.length ? tabla(['Estado',restriccion?'Restricción':'Compromiso',restriccion?'Acción de resolución':'Acción acordada','Responsable',
         ...(restriccion?['Partidas vinculadas','Semana']:[]),'Registro','Fecha comprometida',
         restriccion?'Fecha de cierre':'Fecha de cumplimiento','Acción'],filas.join('')) :
-        '<p>'+(restriccion?'Aún no hay restricciones registradas.':'Aún no hay compromisos registrados.')+'</p>')+'</section>';
+        '<p>'+(restriccion?'Aún no hay restricciones registradas.':'Aún no hay compromisos registrados.')+'</p>')+'</section>'+
+      (!restriccion?medidasEfectivas(registros):'');
+    actualizarRelojesAndon();
   }
 
   function mostrarPartidasRestriccion() {
@@ -5468,6 +5707,12 @@ const baseReporteGpro=[
       vista.tipo === 'restriccion' ? 'Restricción registrada.' : 'Compromiso registrado.');
   });
   listadoGestion.addEventListener('click', evento => {
+    const paso = evento.target.closest('[data-paso-pdca]');
+    if (paso && gestion && !gestion.ocupado) {
+      const registro = gestion.registros.find(r=>r.id===paso.dataset.pasoPdca);
+      if (registro) abrirPasoPdca(gestion,registro);
+      return;
+    }
     const boton = evento.target.closest('[data-cerrar-gestion]');
     if (!boton || !gestion || gestion.ocupado) return;
     guardarGestion(gestion, '/rest/v1/rpc/gpro_cerrar_gestion', {p_id:boton.dataset.cerrarGestion}, 'Registro actualizado.');
@@ -6383,7 +6628,7 @@ const baseReporteGpro=[
       if (!vigente()) return;
       const partidas = plan?.partidas??[], corte = foto?Date.parse(foto.corte):Date.now();
       const {dias,totales,qEnviadaPorDia} = calcularIndicadoresPiloto(partidas,registros??[],cierres,pods);
-      const metricas = datosMetricasPiloto({desde:lunes,hasta:fechaDesde(lunes,3)},plan?[plan]:[],pods??[],registros??[],cnc??[],cierres,corte,[],vacias??[]);
+      const metricas = datosMetricasPiloto({desde:lunes,hasta:fechaDesde(lunes,3)},plan?[plan]:[],pods??[],registros??[],cnc??[],cierres,corte,vacias??[]);
       const [programado,real,ppc] = razonesSemana(semana);
       const confianza = semana.cerrado_en ? (semana.actividades_enviadas>0?
         semana.actividades_validadas/semana.actividades_enviadas:
@@ -6876,7 +7121,7 @@ const baseReporteGpro=[
       paginar('gpro_planes_semanales','lunes,partidas','lunes.asc',despuesDeLunes),
       paginar('gpro_pods','lunes,jornada,metas,cerrado_en','lunes.asc,jornada.asc',jornada),
       paginar('gpro_ejecucion_diaria','id,lunes,jornada,item_plan,descripcion,cantidad,hh,estado_ito,revision,creado_en,'+
-        'gpro_historial_revision(revision,evento,registrado_en),gpro_inicios_revision(revision,iniciado_en)','id.asc',despuesDeId),
+        'gpro_historial_revision(revision,evento,estado_ito,registrado_en),gpro_inicios_revision(revision,iniciado_en)','id.asc',despuesDeId),
       paginar('gpro_revision_cnc',estadoRonda+',causas','lunes.asc,jornada.asc,ronda.asc',ronda),
       paginar('gpro_cierres_diarios','lunes,jornada,cerrado_en','lunes.asc,jornada.asc',jornada),
       paginar('gpro_actividades_vacias',estadoRonda,'lunes.asc,jornada.asc,ronda.asc',ronda),
@@ -6884,10 +7129,11 @@ const baseReporteGpro=[
       const observaciones = new Map(), hhIncompletas = new Set();
       for (const r of registros) {
         const clave = fechaDesde(r.lunes,r.jornada);
-        if (r.estado_ito==='observado') observaciones.set(clave,(observaciones.get(clave)??0)+1);
+        if (r.estado_ito==='observado'||ciclosAndon(r.gpro_historial_revision).some(c=>!c.fin))
+          observaciones.set(clave,(observaciones.get(clave)??0)+1);
         if (r.estado_ito!=='borrador' && r.hh==null) hhIncompletas.add(clave);
       }
-      return datosMetricasPiloto({desde,hasta:hoy},planes,pods,registros,cnc,cierres,corte,[],vacias).tendencias
+      return datosMetricasPiloto({desde,hasta:hoy},planes,pods,registros,cnc,cierres,corte,vacias).tendencias
         .map(d=>({...d,observadasPendientes:observaciones.get(d.jornada)??0,hhIncompletas:hhIncompletas.has(d.jornada)}));
     });
   }
@@ -6901,7 +7147,7 @@ const baseReporteGpro=[
         fueraPlazo ? 'D+1 · '+estadosEntrega[d.estadoEntrega] : '',
         brechaPpc ? 'PPC '+pctTendencia(d.ppc)+' · '+d.cumplidas+' de '+d.previstas+' metas cumplidas' : '',
         brechaHh ? 'HH bajo lo programado · '+num(d.reales)+' de '+num(d.programadas)+' HH' : '',
-        d.observadasPendientes ? 'Actividades observadas por ITO · '+d.observadasPendientes : '',
+        d.observadasPendientes ? 'Andon de actividades · '+d.observadasPendientes+' por resolver' : '',
       ].filter(Boolean);
       return temas.length?[{...d,temas,critico:d.estadoEntrega==='vencido'}]:[];
     }).sort((a,b)=>Number(b.critico)-Number(a.critico)||b.jornada.localeCompare(a.jornada));
@@ -7353,6 +7599,144 @@ const baseReporteGpro=[
       ? sumaDias(partida,(p,d)=>Number(hhDia(p,d))) / sumaDias(partida,qDia) : NaN;
   }
 
+  function ciclosAndon(historial) {
+    const ciclos = [];
+    const eventos = [...(historial??[])].sort((a,b)=>a.revision-b.revision);
+    let actual = null;
+    for (const h of eventos) {
+      if (h.evento==='observacion' || (h.evento==='registro_previo'&&h.estado_ito==='observado')) {
+        if (!actual) {
+          actual = {inicio:h.registrado_en,revision:h.revision,fin:null,eventos:[]};
+          ciclos.push(actual);
+        }
+        actual.motivo = h.observacion;
+        actual.turno = 'Oficina Técnica · corregir y reenviar';
+      } else if (actual && h.evento==='correccion') {
+        actual.turno = 'ITO · revisar y validar';
+      } else if (actual && h.evento==='validacion') {
+        actual.fin = h.registrado_en;
+      } else continue;
+      actual.eventos.push(h);
+      if (actual.fin) actual = null;
+    }
+    return ciclos;
+  }
+
+  function actualizarRelojesAndon() {
+    for (const reloj of document.querySelectorAll('[data-andon-inicio]:not([data-andon-fin-congelado])')) {
+      const inicio = Date.parse(reloj.dataset.andonInicio), fin = Date.parse(reloj.dataset.andonFin);
+      const corte = Number.isFinite(fin)?fin:Date.now();
+      const segundos = Math.max(0,Math.floor((corte-inicio)/1000));
+      reloj.textContent = Number.isFinite(segundos)
+        ? [Math.floor(segundos/3600),Math.floor(segundos/60)%60,segundos%60]
+          .map(n=>String(n).padStart(2,'0')).join(':') : '—';
+      if (!Number.isFinite(fin))
+        reloj.closest('.andon-actividad').dataset.vencido = String(corte>Date.parse(reloj.dataset.andonPlazo));
+      else reloj.dataset.andonFinCongelado = '';
+    }
+  }
+
+  function mostrarAndon(registros) {
+    const ciclos = registros.flatMap(r=>ciclosAndon(r.gpro_historial_revision).map(c=>({...c,registro:r})));
+    const activos = ciclos.filter(c=>!c.fin);
+    const cerrados = ciclos.filter(c=>c.fin).sort((a,b)=>Date.parse(b.fin)-Date.parse(a.fin));
+    const abiertos = new Set([...panelAndon.querySelectorAll('details[open]')].map(d=>d.dataset.andonHistorial));
+    const etiquetas = {observacion:'Observación ITO',registro_previo:'Observación histórica',
+      correccion:'Corrección reenviada',validacion:'Validación ITO'};
+    const tarjeta = c=>{
+      const id = c.registro.id+'-'+c.revision;
+      const inicio = Date.parse(c.inicio);
+      const plazo = Number.isFinite(inicio)?new Date(venceRevision(fechaCortaSantiago.format(inicio))).toISOString():null;
+      return '<article class="andon-actividad" data-andon-activo="'+!c.fin+'"><div class="row split">'+
+        '<strong>'+esc([c.registro.item_plan,c.registro.descripcion].filter(Boolean).join(' · '))+'</strong>'+
+        '<span class="andon-tiempo" role="timer" aria-label="Tiempo transcurrido" data-andon-inicio="'+esc(c.inicio)+
+        '" data-andon-fin="'+esc(c.fin)+'" data-andon-plazo="'+esc(plazo)+'"></span></div>'+
+        '<p>'+esc(c.motivo||'Motivo sin registro')+'</p>'+
+        (c.fin?'<p><strong>Validada</strong> · '+hora(c.fin)+'</p>':
+          '<p><strong>Turno actual</strong> · '+esc(c.turno)+'</p><p><strong>Plazo compartido</strong> · '+hora(plazo)+' <span class="andon-vencido">Vencido</span></p>')+
+        '<details data-andon-historial="'+esc(id)+'"'+(abiertos.has(id)?' open':'')+'><summary>Historial</summary><ol>'+
+        c.eventos.map(h=>'<li>'+esc(etiquetas[h.evento])+' · '+hora(h.registrado_en)+
+          (h.observacion?'<p>'+esc(h.observacion)+'</p>':'')+'</li>').join('')+'</ol></details></article>';
+    };
+    panelAndon.hidden = !ciclos.length;
+    panelAndon.innerHTML = (activos.length?'<h3>Andon activo · '+activos.length+'</h3>'+
+      '<p>Oficina Técnica corrige e ITO valida. El plazo compartido vence al día siguiente de la primera observación a las 17:00 (Santiago).</p>'+
+      activos.map(tarjeta).join(''):'')+
+      (cerrados.length?'<details data-andon-historial="cerrados"'+(abiertos.has('cerrados')?' open':'')+
+        '><summary>Andon validados ('+cerrados.length+')</summary>'+cerrados.map(tarjeta).join('')+'</details>':'');
+    actualizarRelojesAndon();
+  }
+
+  async function consultarAndon(vista,consulta) {
+    const vigente = ()=>vistaPlanRemoto===vista && vista.jornada===consulta && !panelPlan.hidden && !reporteAbierto.hidden;
+    if (!vigente() || consulta.consultandoAndon) return;
+    consulta.consultandoAndon = true;
+    try {
+      const relacion = 'gpro_historial_revision';
+      const ruta = '/rest/v1/gpro_ejecucion_diaria?select=id,item_plan,descripcion,'+relacion+
+        '!inner(revision,evento,estado_ito,observacion,registrado_en)&'+relacion+
+        '.evento=in.(observacion,correccion,validacion,registro_previo)&order=id.asc&limit=500'+
+        '&contrato_codigo=eq.'+encodeURIComponent(vista.codigo)+'&lunes=eq.'+vista.lunes+'&jornada=eq.'+consulta.jornada;
+      const registros = await consultarPaginasPiloto(ruta,despuesDeId,vigente);
+      if (!vigente()) return;
+      const firma = JSON.stringify(registros);
+      if (firma!==consulta.firmaAndon) {
+        consulta.firmaAndon = firma;
+        mostrarAndon(registros);
+      }
+    } catch {
+      if (vigente() && !consulta.firmaAndon) {
+        panelAndon.hidden = false;
+        panelAndon.textContent = 'No se pudo consultar el Andon. Se volverá a consultar en esta jornada.';
+      }
+    } finally {
+      consulta.consultandoAndon = false;
+    }
+  }
+
+  function detalleAndonCnc(r) {
+    const plazo = new Date(instanteSantiago(fechaDesde(r.plazo,1),'00:00:00')).toISOString();
+    return '<div class="andon-actividad andon-cnc" data-andon-activo="'+!r.cerrado_en+'">'+
+      '<strong>'+(r.cerrado_en?'Andon CNC cerrado':'Andon CNC activo')+'</strong> · '+
+      '<span class="andon-tiempo" role="timer" aria-label="Tiempo transcurrido del compromiso CNC" data-andon-inicio="'+
+      esc(r.cnc_abierto_en)+'" data-andon-fin="'+esc(r.cerrado_en)+'" data-andon-plazo="'+esc(plazo)+'"></span>'+
+      '<p>'+esc(r.responsable)+' · Término '+fechaCorta(r.plazo)+' <span class="andon-vencido">Vencido</span></p>'+
+      '<small>Abierto '+hora(r.cnc_abierto_en)+(r.cerrado_en?' · Cerrado '+hora(r.cerrado_en):'')+'</small></div>';
+  }
+
+  async function consultarAndonesCnc(vista,consulta) {
+    const panel = cncDiarias.querySelector('[data-andon-cnc]');
+    const vigente=()=>panel?.isConnected && !panelPlan.hidden && !reporteAbierto.hidden && !cncDiarias.hidden &&
+      vistaPlanRemoto===vista && vista.jornada===consulta;
+    if (!vigente() || consulta.cargandoCncAndon || consulta.sinAndonCnc) return;
+    consulta.cargandoCncAndon = true;
+    try {
+      const registros = await consultarPaginasPiloto('/rest/v1/gpro_gestion_contrato?select=id,detalle,accion,responsable,plazo,cnc_fecha,cnc_abierto_en,cerrado_en'+
+        '&order=id.asc&limit=300&tipo=eq.compromiso&contrato_codigo=eq.'+encodeURIComponent(vista.codigo)+
+        '&cnc_fecha=eq.'+fechaDesde(vista.lunes,consulta.jornada),despuesDeId,vigente);
+      if (!vigente() || panel.dataset.firma===JSON.stringify(registros)) return;
+      panel.dataset.firma = JSON.stringify(registros);
+      panel.hidden = !registros.length;
+      panel.innerHTML = registros.length?'<h4>Compromisos y Andon de la jornada</h4>'+registros.map(r=>
+        '<section class="card"><strong>'+esc(r.detalle)+'</strong><p>'+esc(r.accion)+'</p>'+detalleAndonCnc(r)+'</section>').join('')+
+        '<button type="button" data-ir-compromisos-cnc>Ir a Compromisos</button>':'';
+      actualizarRelojesAndon();
+    } catch (error) {
+      if (['PGRST204','42703'].includes(error.codigo)) consulta.sinAndonCnc=true;
+    } finally {
+      consulta.cargandoCncAndon=false;
+    }
+  }
+
+  cncDiarias.addEventListener('click',e=>{
+    if (e.target.closest('[data-ir-compromisos-cnc]'))
+      menuPiloto.querySelector('[data-menu-piloto="compromiso"]').click();
+  });
+
+  setInterval(()=>{
+    if (!panelGestion.hidden || (!panelPlan.hidden && !reporteAbierto.hidden)) actualizarRelojesAndon();
+  },1000);
+
   function celdaRevision(vista, registro, inline = false) {
     const boton = (accion, texto) => '<button type="button" class="'+({
       enviar:'enviar-actividad', corregir:'enviar-actividad', validar:'primary', observar:'quitar-elemento',
@@ -7462,6 +7846,15 @@ const baseReporteGpro=[
       }]);
       const fila = caja.firstElementChild;
       fila.dataset.filaCnc = '';
+      if (causa?.compromiso_id) fila.dataset.compromisoCnc = causa.compromiso_id;
+      fila.querySelector('[name=responsable-cnc]').closest('label').firstChild.textContent = 'Origen de la causa';
+      const accion = fila.querySelector('[name=accion]');
+      accion.required = true;
+      accion.closest('label').firstChild.textContent = 'Acción comprometida';
+      accion.closest('label').insertAdjacentHTML('afterend',
+        '<label>Responsable de la acción <input name="responsable-accion" maxlength="100" required value="'+esc(causa?.responsable_accion)+'"></label>'+
+        '<label>Fecha de término <input name="plazo-accion" type="date" required min="'+
+        esc(causa?.plazo_accion && causa.plazo_accion<fechaHoy()?causa.plazo_accion:fechaHoy())+'" value="'+esc(causa?.plazo_accion)+'"></label>');
       fila.querySelector('[data-quitar-cnc]').dataset.quitarCausa = '';
       filas.append(fila);
     };
@@ -7500,20 +7893,38 @@ const baseReporteGpro=[
         const campo = nombre=>f.querySelector('[name="'+nombre+'"]');
         return {primaria:clasificacion.categoria,secundaria:clasificacion.subcategoria,
           responsable:campo('responsable-cnc').value,causa:campo('causa').value.trim(),accion:campo('accion').value.trim(),
-          hh_afectadas:objetivo==null?null:campo('hh').valueAsNumber};
+          responsable_accion:campo('responsable-accion').value.trim(),plazo_accion:campo('plazo-accion').value,
+          compromiso_id:f.dataset.compromisoCnc,hh_afectadas:objetivo==null?null:campo('hh').valueAsNumber};
       });
       if (lista.length===1) lista[0].hh_afectadas = objetivo;
-      if (lista.some(c=>!c.causa||!c.primaria||!c.secundaria||!c.responsable) ||
+      if (lista.some(c=>!c.causa||!c.primaria||!c.secundaria||!c.responsable||!c.accion||!c.responsable_accion||!c.plazo_accion) ||
         (objetivo!=null && lista.reduce((s,c)=>s+Math.round(c.hh_afectadas*100),0)!==Math.round(objetivo*100))) {
-        resumen.textContent = 'Completa cada causa y asigna exactamente las HH de la brecha.';
+        resumen.textContent = 'Completa cada causa, su compromiso y las HH de la brecha.';
         return null;
       }
       return lista;
     }};
   }
 
-  const cuerpoEditorCnc = '<p data-brecha-cnc role="status"></p><div data-filas-cnc></div>'+
+  const cuerpoEditorCnc = '<p class="muted">Cada causa genera un compromiso y un Andon hasta que se marque cumplido.</p>'+
+    '<p data-brecha-cnc role="status"></p><div data-filas-cnc></div>'+
     '<button type="button" data-agregar-causa>Agregar causa</button>';
+
+  async function verificarSeguimientoCnc(form,estado) {
+    const boton=form.querySelector('[type=submit]');
+    boton.disabled = true;
+    try {
+      await solicitar('/rest/v1/gpro_gestion_contrato?select=cnc_abierto_en&limit=0',{},token);
+      return true;
+    } catch (error) {
+      estado.textContent = ['PGRST204','42703'].includes(error.codigo)?
+        'Aplica la migración 45 en Supabase para guardar CNC con compromiso.':
+        'No se pudo verificar el seguimiento de CNC. Reintenta.';
+      return false;
+    } finally {
+      boton.disabled = false;
+    }
+  }
 
   function abrirRevision(vista, registro, accion, ejecucion = null, confirmarEnvio = null) {
     const editar = accion === 'editar';
@@ -7595,7 +8006,7 @@ const baseReporteGpro=[
     formulario.addEventListener('input', mostrarCnc);
     dialogo.querySelector('[data-cancelar]').addEventListener('click', () => dialogo.close());
     dialogo.addEventListener('close', () => dialogo.remove(), {once:true});
-    formulario.addEventListener('submit', event => {
+    formulario.addEventListener('submit', async event => {
       event.preventDefault();
       const valores = accion === 'observar' ? {p_observacion:campos.observacion.value.trim()} : {};
       if (cambiaEjecucion) Object.assign(valores, {p_cantidad:ejecucion?.cantidad ?? campos.cantidad.valueAsNumber,
@@ -7612,6 +8023,7 @@ const baseReporteGpro=[
         const causas = editor.leer();
         if (!causas) return;
         valores.p_cnc = causas.length===1?causas[0]:causas;
+        if (!await verificarSeguimientoCnc(formulario,cnc.querySelector('[data-brecha-cnc]')) || !dialogo.open) return;
       }
       dialogo.close();
       if (confirmarEnvio) confirmarEnvio(valores);
@@ -7649,15 +8061,81 @@ const baseReporteGpro=[
       });
   }
 
+  async function cargarBrechasPod(vista,consulta,mensaje='') {
+    const panel = prepararPodPiloto.querySelector('[data-brechas-pod]');
+    const vigente = ()=>panel?.isConnected && vistaPlanRemoto===vista && vista.jornada===consulta;
+    if (!vigente() || consulta.cargandoBrechas) return;
+    consulta.cargandoBrechas = true;
+    const estado = panel.querySelector('[role="status"]');
+    const cuerpo = panel.querySelector('[data-lista-brechas]');
+    const actualizar = panel.querySelector('[data-actualizar-brechas]');
+    actualizar.disabled = true;
+    estado.textContent = 'Consultando brechas…';
+    try {
+      const filas = await solicitar('/rest/v1/rpc/gpro_brechas_pod',{method:'POST',body:JSON.stringify({
+        p_contrato:vista.codigo,p_lunes:vista.lunes,p_jornada:consulta.jornada,
+      })},token);
+      if (!vigente()) return;
+      consulta.brechas = filas;
+      cuerpo.innerHTML = filas.length ? '<ul class="lista-pdca">'+filas.map((b,i)=>
+        '<li><strong>'+esc(nombresBrecha[b.tipo])+'</strong><p>'+esc(b.detalle)+'</p>'+
+        (b.compromiso?'<span class="status review">'+esc(etapasPdca[b.etapa])+'</span>'+
+          ' <button type="button" class="link" data-ver-compromisos-pod>Ver compromisos</button>':
+          vista.perfil==='Oficina Técnica'?'<button type="button" data-tomar-brecha="'+i+'">Tomar compromiso</button>':'')+'</li>').join('')+
+          '</ul>':'<p>Sin brechas identificadas ni compromisos vinculados para esa jornada.</p>';
+      estado.textContent = mensaje;
+    } catch (error) {
+      if (vigente()) {
+        consulta.brechas = null;
+        cuerpo.replaceChildren();
+        estado.textContent = error.codigo==='PGRST202'?'Aplica la migración 44 para consultar las brechas y crear compromisos desde el POD.':
+          'No se pudieron consultar las brechas. Pulsa Actualizar brechas.';
+      }
+    } finally {
+      consulta.cargandoBrechas = actualizar.disabled = false;
+    }
+  }
+
+  prepararPodPiloto.addEventListener('click',evento=>{
+    const vista = vistaPlanRemoto, consulta = vista?.jornada;
+    if (!consulta || vista.ocupado) return;
+    if (evento.target.closest('[data-actualizar-brechas]')) cargarBrechasPod(vista,consulta);
+    if (evento.target.closest('[data-ver-compromisos-pod]'))
+      menuPiloto.querySelector('[data-menu-piloto="compromiso"]').click();
+    const boton = evento.target.closest('[data-tomar-brecha]');
+    const brecha = boton&&consulta.brechas?.[boton.dataset.tomarBrecha];
+    if (!brecha || brecha.compromiso || vista.perfil!=='Oficina Técnica') return;
+    dialogoPdca('Tomar compromiso · '+nombresBrecha[brecha.tipo],brecha.detalle,
+      '<label>Acción acordada <textarea name="accion" maxlength="500" rows="3" required></textarea></label>'+
+      '<label>Responsable <input name="responsable" maxlength="100" required></label>'+
+      '<label>Plazo <input type="date" name="plazo" min="'+fechaHoy()+'" required></label>','Guardar compromiso',async datos=>{
+        vista.ocupado = true;
+        try {
+          await solicitar('/rest/v1/rpc/gpro_compromiso_brecha',{method:'POST',body:JSON.stringify({
+            p_contrato:vista.codigo,p_lunes:vista.lunes,p_jornada:consulta.jornada,p_tipo:brecha.tipo,p_item:brecha.item,
+            p_accion:datos.accion.trim(),p_responsable:datos.responsable.trim(),p_plazo:datos.plazo,
+          })},token);
+          await cargarBrechasPod(vista,consulta,'Compromiso registrado.');
+        } finally {
+          vista.ocupado = false;
+        }
+      });
+  });
+
   function mostrarPreparacionPod(vista,consulta) {
     const {jornada,partidaDiaria} = consulta;
     const filas = partidaDiaria.map(p=>fila([
       esc(p[0]),esc(p[2]),esc(p[3]),num(qDia(p,jornada)),num(hhDia(p,jornada)),
     ])).join('');
-    prepararPodPiloto.innerHTML = '<h3>Plan de Obra Diario</h3><p>Programación de la jornada según el Plan Semanal.</p>'+
+    const anterior = fechaDesde(vista.lunes,jornada===0?-4:jornada-1);
+    prepararPodPiloto.innerHTML = '<h3>Plan de Obra Diario</h3>'+
+      '<section class="card pod-brechas" data-brechas-pod><div class="row split"><h4>Brechas de la jornada anterior · '+fechaCorta(anterior)+
+      '</h4><button type="button" data-actualizar-brechas>Actualizar brechas</button></div>'+
+      '<p role="status"></p><div data-lista-brechas></div></section><p>Programación de la jornada según el Plan Semanal.</p>'+
       (filas?tabla(['Ítem','Actividad','Unidad','Q Plan','HH Plan'],filas):'<p>El Plan Semanal no tiene partidas para esta jornada.</p>')+
       (vista.perfil==='Oficina Técnica'?'<form><button type="submit" class="primary">Cerrar POD</button></form>':'')+
       '<p data-estado-pod role="status"></p>';
+    cargarBrechasPod(vista,consulta);
   }
 
   prepararPodPiloto.addEventListener('submit',async evento=>{
@@ -7667,7 +8145,7 @@ const baseReporteGpro=[
     if (vista?.perfil !== 'Oficina Técnica' || vista.ocupado || !consulta || prepararPodPiloto.hidden || consulta.pod?.cerrado_en) return;
     const mensaje = prepararPodPiloto.querySelector('[data-estado-pod]');
     const metas = Object.fromEntries(consulta.partidaDiaria.map(p=>[p[0],qDia(p,consulta.jornada)]));
-    const boton = prepararPodPiloto.querySelector('button');
+    const boton = prepararPodPiloto.querySelector('button[type="submit"]');
     vista.ocupado = boton.disabled = true;
     try {
       await solicitar('/rest/v1/rpc/gpro_guardar_pod',{method:'POST',body:JSON.stringify({
@@ -7758,7 +8236,7 @@ const baseReporteGpro=[
     activar();
     dialogo.querySelector('[data-cancelar]').onclick = () => dialogo.close();
     dialogo.addEventListener('close',()=>dialogo.remove(),{once:true});
-    form.addEventListener('submit',evento=>{
+    form.addEventListener('submit',async evento=>{
       evento.preventDefault();
       const nota = form.elements.respuesta.value.trim();
       if (!nota) { form.elements.respuesta.focus(); return; }
@@ -7768,8 +8246,10 @@ const baseReporteGpro=[
         if (!causas) { e.campos.parentElement.open = true; return; }
         cambios[e.id] = causas;
       }
+      const editado=editores.find(e=>!e.campos.disabled);
+      if (editado && (!await verificarSeguimientoCnc(form,editado.campos.querySelector('[data-brecha-cnc]')) || !dialogo.open)) return;
       dialogo.close();
-      gestionarRevisionDiaria('reenviar_cnc',nota,Object.keys(cambios).length?cambios:null);
+      gestionarRevisionDiaria('reenviar_cnc',nota,editado?cambios:null);
     });
     panelPod.append(dialogo);
     dialogo.showModal();
@@ -7963,8 +8443,9 @@ const baseReporteGpro=[
     const partidaDiaria = metasPodPiloto(vista.partidas,jornada);
     const consulta = {jornada, partidaDiaria};
     reporteAbierto.dataset.perfil = vista.perfil;
-    observacionesReporte.hidden = true;
+    observacionesReporte.hidden = panelAndon.hidden = true;
     observacionesReporte.replaceChildren();
+    panelAndon.replaceChildren();
     for (const boton of vistasReporte.querySelectorAll('button')) {
       boton.querySelector('[data-observaciones-tab]')?.remove();
     }
@@ -8028,7 +8509,9 @@ const baseReporteGpro=[
         if (cierreItoVigente(ultimo,consulta.cnc,registros,consulta.vacia)) formal=ultimo;
       }
       consulta.registros = registros;
+      consultarAndon(vista,consulta);
       mostrarCncJornada(registros,consulta,vista);
+      consultarAndonesCnc(vista,consulta);
       consulta.cerrado = cierreDiario.cerrado;
       if (podsRemotos && !consulta.pod?.cerrado_en && !registros.length && !consulta.cerrado && vista.perfil!=='ITO') {
         prepararPodPiloto.hidden = false;
